@@ -1,0 +1,50 @@
+# What the agent watches for Australia. Official sources only.
+# how: feed (Atom/RSS), api, or page (the agent reads the page and looks for new items).
+# The agent checks every URL on each run and opens an issue if one stops working.
+
+- regulator: AUSTRAC
+  covers: AML/CTF rules and Tranche 2 guidance for lawyers
+  watch:
+    - { how: page, url: "https://www.austrac.gov.au/industry-and-business/obligations-and-guidance/latest-guidance-updates" }
+    - { how: page, url: "https://www.austrac.gov.au/amlctf-rules-release-and-upcoming-guidance" }
+
+- regulator: Legal Services Council
+  covers: Uniform Law rules for NSW, Victoria and WA
+  watch:
+    - { how: page, url: "https://legalservicescouncil.org.au/consultations/current-consultations.html" }
+    - { how: page, url: "https://legalservicescouncil.org.au/uniform-framework/Recent-changes.html" }
+
+- regulator: OAIC
+  covers: Privacy Act changes and guidance
+  watch:
+    - { how: page, url: "https://www.oaic.gov.au/engage-with-us/consultations" }
+
+- regulator: Federal Register of Legislation
+  covers: Federal laws and rules, as made
+  watch:
+    - { how: api, url: "https://api.prod.legislation.gov.au/" }
+
+- regulator: VLSB+C
+  covers: Victorian regulator updates
+  watch:
+    - { how: page, url: "https://lsbc.vic.gov.au/news-updates" }
+
+- regulator: Law Society of NSW
+  covers: NSW practice guidance
+  watch:
+    - { how: page, url: "https://www.lawsociety.com.au/" }
+
+- regulator: LPBWA
+  covers: Western Australia regulator updates
+  watch:
+    - { how: page, url: "https://www.lpbwa.org.au/" }
+
+- regulator: Queensland Law Society
+  covers: Queensland rules and guidance
+  watch:
+    - { how: page, url: "https://www.qls.com.au/" }
+
+- regulator: Home Affairs
+  covers: Cyber security duties for businesses
+  watch:
+    - { how: page, url: "https://www.homeaffairs.gov.au/" }

@@ -3,12 +3,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout: nav with country picker (top right) → mint hero with the ask box → "Now in force" highlight → filters (status, your firm, topic) → separated change cards → detail drawer. Tokens follow the new legl.com. */
+/* Layout: quiet nav (country picker top right) → question + ask box that answers in place → key-dates timeline (past ● Today ○ future) → filters as plain text → one list panel with a date column → detail drawer. Tokens follow the new legl.com. */
 :root {
-  --page: #F4F5F7;
+  --page: #F7F8FA;
   --card: #FFFFFF;
-  --sunk: #EDEFF2;
-  --line: #E3E6EA;
+  --sunk: #EEF0F3;
+  --line: #E5E7EB;
   --line-strong: #CDD2D9;
   --ink: #1B1B1B;
   --body: #3F444B;
@@ -17,8 +17,7 @@
   --green-mid: #01B890;
   --green-surface: #E6F8F4;
   --green-tint: #CCF1E9;
-  --hero-a: #E6F8F4;
-  --hero-b: #F4F5F7;
+  --glow: rgba(1, 184, 144, 0.10);
   --amber: #8A5C00;
   --amber-surface: #FFF3D6;
   --indigo: #4F46E5;
@@ -30,7 +29,7 @@
   --logo: #01B88E;
   --scrim: rgba(17, 18, 19, 0.35);
   --float: 0 12px 32px rgba(16, 24, 40, 0.14), 0 2px 6px rgba(16, 24, 40, 0.06);
-  --box: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.07);
+  --box: 0 1px 2px rgba(16, 24, 40, 0.04), 0 10px 30px rgba(16, 24, 40, 0.07);
   --font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -38,9 +37,9 @@
   :root:not([data-theme="light"]) {
     --page: #111213;
     --card: #1A1C1F;
-    --sunk: #222529;
+    --sunk: #23262A;
     --line: #2B2E33;
-    --line-strong: #3B3F45;
+    --line-strong: #3E4248;
     --ink: #F2F2F2;
     --body: #CDD0D5;
     --muted: #9AA0A8;
@@ -48,8 +47,7 @@
     --green-mid: #01B890;
     --green-surface: #12302A;
     --green-tint: #174036;
-    --hero-a: #10251F;
-    --hero-b: #111213;
+    --glow: rgba(1, 184, 144, 0.10);
     --amber: #F0C060;
     --amber-surface: #33280F;
     --indigo: #A7A3F2;
@@ -61,16 +59,16 @@
     --logo: #FFFFFF;
     --scrim: rgba(0, 0, 0, 0.55);
     --float: 0 12px 32px rgba(0, 0, 0, 0.5);
-    --box: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    --box: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --page: #111213;
   --card: #1A1C1F;
-  --sunk: #222529;
+  --sunk: #23262A;
   --line: #2B2E33;
-  --line-strong: #3B3F45;
+  --line-strong: #3E4248;
   --ink: #F2F2F2;
   --body: #CDD0D5;
   --muted: #9AA0A8;
@@ -78,8 +76,7 @@
   --green-mid: #01B890;
   --green-surface: #12302A;
   --green-tint: #174036;
-  --hero-a: #10251F;
-  --hero-b: #111213;
+  --glow: rgba(1, 184, 144, 0.10);
   --amber: #F0C060;
   --amber-surface: #33280F;
   --indigo: #A7A3F2;
@@ -91,7 +88,7 @@
   --logo: #FFFFFF;
   --scrim: rgba(0, 0, 0, 0.55);
   --float: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --box: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --box: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
   color-scheme: dark;
 }
 
@@ -113,130 +110,130 @@ a { color: var(--green); text-underline-offset: 3px; }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--green-mid); outline-offset: 2px; }
-.wrap { max-width: 880px; margin: 0 auto; padding-inline: 20px; }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 20px; }
 
 /* Nav */
-.nav { background: var(--card); border-bottom: 1px solid var(--line); position: relative; z-index: 20; }
-.nav .wrap { max-width: 1120px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+.nav .wrap { max-width: 1120px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 18px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 500; min-width: 0; }
 .brand svg { width: 44px; height: auto; color: var(--logo); flex: none; }
-.brand .sep { width: 1px; height: 18px; background: var(--line); flex: none; }
+.brand .sep { width: 1px; height: 18px; background: var(--line-strong); flex: none; }
 .brand span:last-child { white-space: nowrap; }
 .country { position: relative; }
-.country-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 12px 7px 10px; font-size: 14px; font-weight: 500; color: var(--ink); }
-.country-btn:hover { border-color: var(--ink); }
+.country-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px 7px 10px; font-size: 14px; font-weight: 500; color: var(--ink); }
+.country-btn:hover { border-color: var(--line-strong); }
 .country-btn svg { width: 16px; height: 16px; color: var(--muted); }
-.country-menu { position: absolute; right: 0; top: calc(100% + 8px); background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--float); padding: 6px; min-width: 220px; }
-.country-menu p { font-size: 12px; color: var(--muted); padding: 6px 10px 4px; }
+.country-menu { position: absolute; right: 0; top: calc(100% + 8px); background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--float); padding: 6px; min-width: 200px; z-index: 30; }
 .country-menu button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; background: transparent; border: 0; border-radius: 8px; padding: 9px 10px; font-size: 15px; color: var(--ink); }
 .country-menu button:hover { background: var(--sunk); }
-.country-menu button small { color: var(--muted); font-size: 12px; }
 .country-menu .tick { width: 16px; height: 16px; color: var(--green); }
 
 /* Hero + ask */
-.hero { background: linear-gradient(180deg, var(--hero-a) 0%, var(--hero-b) 100%); padding-block: 56px 28px; }
-.hero h1 { font-size: clamp(30px, 4.6vw, 46px); letter-spacing: -0.035em; text-align: center; }
-.hero .sub { text-align: center; color: var(--muted); margin-top: 10px; font-size: 16px; }
-.ask { margin: 28px auto 0; max-width: 680px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--box); padding: 14px 14px 12px 18px; display: grid; gap: 6px; }
-.ask:focus-within { border-color: var(--green-mid); }
-.ask textarea { border: 0; outline: 0; resize: none; background: transparent; font-size: 17px; line-height: 1.5; min-height: 54px; width: 100%; color: var(--ink); }
+.hero { padding-block: 64px 8px; background: radial-gradient(60% 120% at 50% 0%, var(--glow), transparent 70%); }
+.hero h1 { font-size: clamp(30px, 4.8vw, 46px); letter-spacing: -0.035em; text-align: center; }
+.ask { margin: 28px auto 0; max-width: 680px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--box); overflow: hidden; }
+.ask:focus-within { border-color: var(--line-strong); }
+.qa { padding: 18px 20px 16px; display: grid; gap: 12px; border-bottom: 1px solid var(--line); }
+.qa-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.qa-q { font-size: 14px; color: var(--muted); padding-top: 4px; }
+.qa-x { width: 28px; height: 28px; flex: none; border-radius: 50%; border: 0; background: var(--sunk); color: var(--muted); display: grid; place-items: center; }
+.qa-x:hover { color: var(--ink); }
+.qa-x svg { width: 14px; height: 14px; }
+.qa-a { display: grid; gap: 10px; color: var(--ink); font-size: 15px; }
+.qa-a ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.qa-a .sub { color: var(--muted); }
+.qa-src { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.qa-src span { font-size: 12px; color: var(--muted); margin-right: 2px; }
+.src-link { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: var(--ink); }
+.src-link:hover { border-color: var(--green); color: var(--green); }
+.thinking { color: var(--muted); font-size: 14px; }
+.ask-row { display: flex; align-items: flex-end; gap: 12px; padding: 14px 14px 14px 20px; }
+.ask textarea { flex: 1; min-width: 0; border: 0; outline: 0; resize: none; background: transparent; font-size: 17px; line-height: 1.5; min-height: 56px; color: var(--ink); padding: 2px 0; }
+.ask.answered textarea { min-height: 28px; font-size: 16px; }
 .ask textarea::placeholder { color: var(--muted); }
-.ask-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.ask-hint { font-size: 12px; color: var(--muted); }
 .send { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--btn); color: var(--btn-ink); display: grid; place-items: center; flex: none; }
 .send svg { width: 18px; height: 18px; }
 .send:hover { opacity: 0.85; }
 .suggest { margin: 14px auto 0; max-width: 680px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.suggest button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 13px; font-size: 14px; color: var(--body); }
-.suggest button:hover { border-color: var(--ink); color: var(--ink); }
-
-.answer { margin: 18px auto 0; max-width: 680px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; display: grid; gap: 12px; }
-.answer-top { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
-.answer-top button { background: none; border: 0; color: var(--muted); font-size: 13px; padding: 0; }
-.answer-top button:hover { color: var(--ink); }
-.answer-body { display: grid; gap: 10px; color: var(--ink); font-size: 15px; }
-.answer-body ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
-.answer-body .sub { color: var(--muted); }
-.answer-src { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); align-items: center; }
-.answer-src span { font-size: 12px; color: var(--muted); margin-right: 2px; }
-.src-link { border: 1px solid var(--line); background: var(--sunk); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: var(--ink); }
-.src-link:hover { border-color: var(--green); color: var(--green); }
-.thinking { color: var(--muted); font-size: 14px; }
+.suggest button { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 6px 13px; font-size: 14px; color: var(--muted); }
+.suggest button:hover { border-color: var(--line-strong); color: var(--ink); }
 
 /* Section heads */
-.block { padding-block: 28px 8px; }
-.block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
-.block-head { flex-wrap: wrap; }
-.block-head h2 { font-size: 20px; flex: none; }
-.block-head p { font-size: 14px; color: var(--muted); }
+.sec { padding-top: 56px; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 20px; }
+.sec-head h2 { font-size: 20px; }
+.sec-head p { font-size: 14px; color: var(--muted); }
 
-/* Now in force */
-.inforce { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-.hl { text-align: left; background: var(--green-surface); border: 1px solid transparent; border-radius: 16px; padding: 18px; display: grid; gap: 8px; align-content: start; }
-.hl:hover { border-color: var(--green-mid); }
-.hl .when { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--green); font-weight: 500; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
-.hl h3 { font-size: 17px; line-height: 1.3; }
-.hl p { font-size: 13px; color: var(--body); }
-.next { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; text-align: left; width: 100%; }
-.next:hover { border-color: var(--line-strong); }
-.next .lbl { font-size: 12px; font-weight: 500; color: var(--indigo); background: var(--indigo-surface); border-radius: 999px; padding: 2px 10px; }
-.next b { color: var(--ink); font-weight: 500; }
-.next span:last-child { color: var(--muted); margin-left: auto; }
+/* Key dates timeline */
+.kd-wrap { display: grid; }
+.kd { position: relative; text-align: left; background: none; border: 0; padding: 26px 18px 0 0; display: grid; gap: 2px; align-content: start; color: inherit; }
+.kd::before { content: ""; position: absolute; top: 7px; left: 0; right: 0; height: 2px; background: var(--green-mid); }
+.kd.future::before { background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 11px); }
+.kd .dot { position: absolute; top: 1px; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--green-mid); box-shadow: 0 0 0 4px var(--page); }
+.kd.future .dot { background: var(--page); border: 2px solid var(--indigo); }
+.kd .lbl { font-size: 12px; color: var(--green); font-weight: 500; }
+.kd.future .lbl { color: var(--indigo); }
+.kd b { font-size: 16px; color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+.kd span.t { font-size: 14px; color: var(--body); line-height: 1.4; }
+.kd small { font-size: 12px; color: var(--muted); }
+.kd:hover b, .kd:hover span.t { color: var(--green); }
+.today { position: relative; padding: 26px 0 0; display: grid; justify-items: center; align-content: start; }
+.today::before { content: ""; position: absolute; top: 7px; left: 0; right: 0; height: 2px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 11px); }
+.today::after { content: ""; position: absolute; top: -4px; left: 50%; width: 2px; height: 24px; margin-left: -1px; background: var(--ink); border-radius: 2px; }
+.today b { font-size: 12px; color: var(--ink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.today small { font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-/* Filters */
-.filters { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 16px; }
-.frow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-.tabs { display: inline-flex; flex-wrap: wrap; gap: 4px; background: var(--sunk); border-radius: 12px; padding: 4px; }
-.tabs button { border: 0; background: transparent; border-radius: 9px; padding: 7px 12px; font-size: 14px; color: var(--muted); font-weight: 500; display: inline-flex; gap: 6px; align-items: center; }
-.tabs button .n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-.tabs button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(16,24,40,.08); }
-.topic { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
-.topic select { background: var(--card); border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px 30px 6px 10px; font-size: 14px; color: var(--ink); appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 15px) 52%, calc(100% - 10px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
-.firm { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
-.firm-label { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
-.firm-label b { color: var(--ink); font-weight: 500; font-size: 15px; }
-.firm-label span { font-size: 13px; color: var(--muted); }
-.firm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.fchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line-strong); background: var(--card); border-radius: 999px; padding: 6px 12px; font-size: 14px; color: var(--body); }
-.fchip:hover { border-color: var(--ink); }
-.fchip svg { width: 14px; height: 14px; display: none; }
+/* Filters (plain, no box) */
+.tabs-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 0 11px; margin-bottom: -1px; font-size: 15px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.tabs button .n { font-size: 12px; color: var(--muted); margin-left: 4px; font-weight: 400; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.selects { display: flex; gap: 16px; padding-bottom: 6px; }
+.sel { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); }
+.sel select { border: 0; background: transparent; font-size: 14px; color: var(--ink); font-weight: 500; padding: 4px 18px 4px 0; appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 9px) 55%, calc(100% - 4px) 55%; background-size: 5px 5px; background-repeat: no-repeat; cursor: pointer; field-sizing: content; max-width: 100%; }
+.sel { min-width: 0; }
+.firm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-block: 16px 18px; }
+.firm-label { font-size: 14px; color: var(--muted); margin-right: 4px; }
+.fchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 12px; font-size: 14px; color: var(--body); }
+.fchip:hover { border-color: var(--line-strong); }
+.fchip svg { width: 13px; height: 13px; display: none; }
 .fchip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--card); }
 .fchip[aria-pressed="true"] svg { display: block; }
+.clear { background: none; border: 0; padding: 0 4px; font-size: 14px; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 
-.summary { margin: 16px 2px 12px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; font-size: 14px; color: var(--muted); }
-.summary b { color: var(--ink); font-weight: 500; }
-.summary button { background: none; border: 0; padding: 0; color: var(--green); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+/* List panel */
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.panel-head { display: grid; grid-template-columns: 92px 1fr auto; gap: 16px; padding: 10px 22px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--line); }
+.row { width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--line); text-align: left; display: grid; grid-template-columns: 92px 1fr auto; gap: 16px; padding: 20px 22px; align-items: start; }
+.row:hover { background: var(--page); }
+.row:last-child { border-bottom: 0; }
+.when { display: grid; gap: 0; padding-top: 1px; }
+.when b { font-size: 17px; color: var(--ink); font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+.when small { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.what { display: grid; gap: 5px; min-width: 0; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; color: var(--muted); }
+.what h3 { font-size: 17px; font-weight: 600; line-height: 1.3; }
+.what p { font-size: 15px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.applies { font-size: 13px; color: var(--muted); }
+.applies b { color: var(--body); font-weight: 500; }
+.go { width: 18px; height: 18px; color: var(--line-strong); margin-top: 3px; }
+.row:hover .go { color: var(--ink); }
+.more-btn { width: 100%; border: 0; border-top: 1px solid var(--line); background: var(--card); padding: 16px; font-size: 14px; font-weight: 500; color: var(--ink); }
+.more-btn:hover { background: var(--page); }
+.empty { padding: 36px 22px; text-align: center; color: var(--muted); font-size: 15px; }
 
-/* Change cards */
-.list { display: grid; gap: 12px; padding-bottom: 8px; }
-.card { width: 100%; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; }
-.card:hover { border-color: var(--line-strong); box-shadow: var(--box); }
-.card-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--muted); }
-.card h3 { font-size: 18px; line-height: 1.3; }
-.card p { font-size: 15px; color: var(--body); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.card-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--line); }
-.applies { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
-.applies .tag { background: var(--sunk); color: var(--body); border-radius: 6px; padding: 2px 8px; }
-.applies .tag.all { background: var(--green-surface); color: var(--green); }
-.open-link { font-size: 14px; color: var(--ink); font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
-.open-link svg { width: 14px; height: 14px; }
-.empty { background: var(--card); border: 1px dashed var(--line-strong); border-radius: 16px; padding: 28px; text-align: center; color: var(--muted); }
-
-.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .pill.s0 { background: var(--amber-surface); color: var(--amber); }
 .pill.s1 { background: var(--indigo-surface); color: var(--indigo); }
 .pill.s2 { background: var(--green-surface); color: var(--green); }
 .pill.sg { background: var(--blue-surface); color: var(--blue); }
 
-/* How it works */
-.how { margin-top: 40px; border-top: 1px solid var(--line); padding-block: 32px 48px; }
-.how h2 { font-size: 18px; }
-.how-grid { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.how-grid div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
-.how-grid h3 { font-size: 15px; }
-.how-grid p { margin-top: 4px; font-size: 14px; color: var(--muted); }
-.fine { margin-top: 16px; font-size: 13px; color: var(--muted); }
+footer { padding-block: 40px 56px; }
+footer p { font-size: 13px; color: var(--muted); max-width: 72ch; }
+footer p + p { margin-top: 6px; }
 
 /* Drawer */
 .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 40; }
@@ -250,10 +247,14 @@ button { cursor: pointer; }
 .d-head { display: grid; gap: 10px; }
 .d-head h2 { font-size: 26px; letter-spacing: -0.03em; }
 .d-head .short { font-size: 16px; color: var(--body); }
-.d-sec h4 { font-size: 12px; font-family: var(--mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 8px; }
+.d-sec h4, .who h4 { font-size: 12px; font-family: var(--mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 0 0 8px; }
 .d-sec ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--ink); }
 .who { background: var(--sunk); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; }
+.who h4 { margin: 0; }
 .who p { color: var(--ink); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 13px; background: var(--card); color: var(--body); border-radius: 6px; padding: 2px 8px; }
+.tag.all { background: var(--green-surface); color: var(--green); }
 .timeline { display: grid; grid-template-columns: repeat(3, 1fr); }
 .t-step { position: relative; padding: 20px 8px 0 0; }
 .t-step::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--line); }
@@ -273,21 +274,32 @@ button { cursor: pointer; }
 .btn svg { width: 14px; height: 14px; }
 .hook { background: var(--green-surface); border-radius: 14px; padding: 16px; display: grid; gap: 12px; }
 .hook p { color: var(--ink); font-size: 15px; }
-.hook .row { display: flex; justify-content: flex-end; }
+.hook .row-end { display: flex; justify-content: flex-end; }
 
-@media (max-width: 600px) {
-  .hero { padding-block: 36px 20px; }
-  .brand span:last-child { display: none; }
-  .brand .sep { display: none; }
-  .card { padding: 16px; }
+@media (max-width: 640px) {
+  .hero { padding-block: 40px 4px; }
+  .brand span:last-child, .brand .sep { display: none; }
+  .kd-wrap { grid-template-columns: 1fr !important; }
+  .kd { padding: 0 0 20px 30px; }
+  .kd::before { top: 0; bottom: 0; left: 6px; right: auto; width: 2px; height: auto; }
+  .kd.future::before { background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 11px); }
+  .kd .dot { top: 3px; }
+  .today { padding: 4px 0 20px 30px; justify-items: start; grid-auto-flow: column; gap: 8px; align-items: baseline; justify-content: start; }
+  .today::before { top: 0; bottom: 0; left: 6px; right: auto; width: 2px; height: auto; background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 11px); }
+  .today::after { top: 12px; left: -2px; width: 18px; height: 2px; margin-left: 0; }
+  .selects { width: 100%; flex-wrap: wrap; gap: 8px 20px; padding-bottom: 10px; }
+  .panel-head { display: none; }
+  .row { grid-template-columns: 1fr auto; padding: 18px 16px; gap: 8px 10px; }
+  .when { grid-column: 1 / -1; grid-auto-flow: column; justify-content: start; gap: 6px; align-items: baseline; }
+  .when b { font-size: 14px; }
+  .go { grid-column: 2; grid-row: 2; }
   .drawer-body { padding: 20px 16px 28px; }
-  .next span:last-child { margin-left: 0; }
-  .tabs { width: 100%; }
-  .tabs button { flex: 1 1 auto; justify-content: center; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .drawer { animation: slide .22s ease-out; }
   @keyframes slide { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .qa { animation: fade .25s ease-out; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 }
 </style>
 
@@ -310,9 +322,8 @@ button { cursor: pointer; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       <div class="country-menu" id="country-menu" role="menu" hidden>
-        <p>Show regulation for</p>
-        <button type="button" role="menuitem" data-country="uk"><span>United Kingdom<br><small>England and Wales focus</small></span><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></button>
-        <button type="button" role="menuitem" data-country="au"><span>Australia<br><small>Federal and state</small></span><svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></button>
+        <button type="button" role="menuitemradio" data-country="uk">United Kingdom<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></button>
+        <button type="button" role="menuitemradio" data-country="au">Australia<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></button>
       </div>
     </div>
   </div>
@@ -322,55 +333,48 @@ button { cursor: pointer; }
   <section class="hero">
     <div class="wrap">
       <h1 id="hero-title">What's changed in UK legal regulation?</h1>
-      <p class="sub" id="hero-sub"></p>
       <form class="ask" id="ask">
-        <textarea id="q" rows="2" aria-label="Search or ask a question"></textarea>
+        <div class="qa" id="qa" hidden>
+          <div class="qa-head"><span class="qa-q" id="qa-q"></span><button type="button" class="qa-x" id="qa-x" aria-label="Clear answer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="qa-a" id="qa-a" aria-live="polite"></div>
+        </div>
         <div class="ask-row">
-          <span class="ask-hint">Type to search the list. Press Enter to ask a question.</span>
-          <button type="submit" class="send" aria-label="Ask">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
-          </button>
+          <textarea id="q" rows="2" aria-label="Ask a question"></textarea>
+          <button type="submit" class="send" aria-label="Ask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
         </div>
       </form>
       <div class="suggest" id="suggest"></div>
-      <div id="answer" hidden></div>
     </div>
   </section>
 
-  <section class="wrap block">
-    <div class="block-head"><h2>Now in force</h2><p>The latest rules firms must already follow</p></div>
-    <div class="inforce" id="inforce"></div>
-    <div id="next"></div>
+  <section class="wrap sec">
+    <div class="sec-head"><h2>Key dates</h2><p>What's in force, and what's next</p></div>
+    <div class="kd-wrap" id="kd"></div>
   </section>
 
-  <section class="wrap block" id="all">
-    <div class="block-head"><h2>All changes</h2><p id="checked"></p></div>
-    <div class="filters">
-      <div class="frow">
-        <div class="tabs" id="tabs" role="group" aria-label="Stage"></div>
-        <label class="topic" for="topic">Topic
-          <select id="topic"></select>
-        </label>
-      </div>
-      <div class="firm">
-        <div class="firm-label"><b>Does your firm…</b><span>Pick any that apply. Changes for all firms always show.</span></div>
-        <div class="firm-chips" id="firm"></div>
+  <section class="wrap sec">
+    <div class="sec-head"><h2>All changes</h2><p id="checked"></p></div>
+    <div class="tabs-row">
+      <div class="tabs" id="tabs" role="group" aria-label="Stage"></div>
+      <div class="selects">
+        <label class="sel" for="topic">Topic <select id="topic"></select></label>
+        <label class="sel" for="sort">Sort <select id="sort"><option value="recent">Most recent</option><option value="soon">Takes effect soonest</option></select></label>
       </div>
     </div>
-    <div class="summary" id="summary"></div>
-    <div class="list" id="list"></div>
-  </section>
-
-  <section class="wrap how">
-    <h2>How this tracker works</h2>
-    <div class="how-grid">
-      <div><h3>Official sources only</h3><p id="how-sources"></p></div>
-      <div><h3>Checked every morning</h3><p>New rules, consultations and guidance are picked up as soon as regulators publish them.</p></div>
-      <div><h3>Reviewed by a person</h3><p>Every summary is checked against the source by someone at Legl before it appears here.</p></div>
+    <div class="firm" id="firm"></div>
+    <div class="panel">
+      <div class="panel-head"><span>Date</span><span>Change</span><span></span></div>
+      <div id="list"></div>
     </div>
-    <p class="fine">Summaries are for information only and are not legal advice. Always read the official source.</p>
   </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <p id="sources-line"></p>
+    <p>Checked every morning against the official source. Summaries are for information only and are not legal advice.</p>
+  </div>
+</footer>
 
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden></aside>
@@ -378,14 +382,14 @@ button { cursor: pointer; }
 <script>
 (function () {
   var TODAY = '2026-10-15';
+  var PAGE = 5;
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var STAGE = { 0: 'Proposed', 1: 'Coming up', 2: 'In force', g: 'Guidance' };
+  var STAGE = { 0: 'Proposed', 1: 'Decided', 2: 'In force', g: 'Guidance' };
 
   var COUNTRY = {
     uk: {
       name: 'United Kingdom', adj: 'UK',
-      sub: 'Rules, consultations and guidance from the SRA, HM Treasury and other UK regulators.',
-      placeholder: 'Search or ask, e.g. what changed in the Money Laundering Regulations?',
+      placeholder: 'Ask about UK regulation',
       firm: [
         { k: 'money', label: 'Hold client money' },
         { k: 'aml', label: 'Do AML-regulated work' },
@@ -393,226 +397,191 @@ button { cursor: pointer; }
         { k: 'claims', label: 'Run consumer claims' },
         { k: 'large', label: 'Have 250+ staff' }
       ],
-      appliesText: { all: 'All firms', money: 'Firms holding client money', aml: 'AML-regulated work', corporate: 'Corporate work', claims: 'Consumer claims', large: 'Large firms' },
+      applies: { all: 'All firms', money: 'Firms holding client money', aml: 'AML-regulated work', corporate: 'Corporate work', claims: 'Consumer claims', large: 'Large firms' },
       suggest: [
         { q: 'What changed for AML this year?', ids: ['uk-mlr', 'uk-fca'] },
         { q: 'What’s changing for client money?', ids: ['uk-money', 'uk-notify'] },
-        { q: 'What’s coming up next?', intent: 'soon' },
         { q: 'What’s open for consultation?', intent: 'proposed' }
       ],
-      soon: [
-        { label: '18 Nov 2026', text: 'Companies House transition ends for existing directors', id: 'uk-idv' },
-        { label: 'Early 2027', text: 'Annual accountants’ reports and COLP/COFA split start', id: 'uk-money' },
-        { label: 'By 2029', text: 'FCA takes over AML supervision', id: 'uk-fca' }
+      key: [
+        { d: '18 Nov 2025', id: 'uk-idv', t: 'Directors must verify their identity', reg: 'Companies House' },
+        { d: '30 Jun 2026', id: 'uk-mlr', t: 'Money Laundering Regulations updated', reg: 'HM Treasury' },
+        'today',
+        { d: '18 Nov 2026', id: 'uk-idv', t: 'ID transition ends for existing directors', reg: 'Companies House', future: true },
+        { d: 'Early 2027', id: 'uk-money', t: 'Annual accountants’ reports start', reg: 'SRA', future: true }
       ],
-      sources: 'SRA, Legal Services Board, HM Treasury, FCA, Companies House, OFSI, ICO, Home Office and legislation.gov.uk.'
+      sources: 'SRA, Legal Services Board, HM Treasury, FCA, Companies House, OFSI, ICO, Home Office and legislation.gov.uk'
     },
     au: {
       name: 'Australia', adj: 'Australian',
-      sub: 'Rules, consultations and guidance from AUSTRAC, the Legal Services Council and other Australian regulators.',
-      placeholder: 'Search or ask, e.g. what do law firms need to do under Tranche 2?',
+      placeholder: 'Ask about Australian regulation',
       firm: [
         { k: 'designated', label: 'Do property, trust or company work' },
         { k: 'trust', label: 'Hold trust money' },
         { k: 'uniform', label: 'Practise in NSW, Victoria or WA' },
         { k: 'turnover', label: 'Turn over more than $3m' }
       ],
-      appliesText: { all: 'All firms', designated: 'Property, trust or company work', trust: 'Firms holding trust money', uniform: 'NSW, Victoria and WA', turnover: 'Turnover over $3m' },
+      applies: { all: 'All firms', designated: 'Property, trust or company work', trust: 'Firms holding trust money', uniform: 'NSW, Victoria and WA', turnover: 'Turnover over $3m' },
       suggest: [
         { q: 'What do law firms need to do under Tranche 2?', ids: ['au-tranche2', 'au-rules'] },
-        { q: 'What’s coming up next?', intent: 'soon' },
         { q: 'What’s changing for costs disclosure?', ids: ['au-costs'] },
-        { q: 'Does the privacy change affect my firm?', ids: ['au-adm'] }
+        { q: 'What’s coming up next?', intent: 'soon' }
       ],
-      soon: [
-        { label: '10 Dec 2026', text: 'Privacy policies must explain automated decisions', id: 'au-adm' }
+      key: [
+        { d: '31 Mar 2026', id: 'au-rules', t: 'New AML/CTF Rules in effect', reg: 'AUSTRAC' },
+        { d: '1 Jul 2026', id: 'au-tranche2', t: 'Law firms regulated for AML/CTF', reg: 'AUSTRAC' },
+        'today',
+        { d: '10 Dec 2026', id: 'au-adm', t: 'Privacy policies must explain automated decisions', reg: 'OAIC', future: true }
       ],
-      sources: 'AUSTRAC, Legal Services Council, OAIC, Home Affairs, Law Society of NSW, VLSB+C, Queensland Law Society and the Federal Register of Legislation.'
+      sources: 'AUSTRAC, Legal Services Council, OAIC, Home Affairs, Law Society of NSW, VLSB+C, Queensland Law Society and the Federal Register of Legislation'
     }
   };
 
+  /* date = when it reached its current stage. eff = when it takes effect (for sorting). */
   var R = [
-    {
-      id: 'uk-mlr', c: 'uk', reg: 'HM Treasury', topic: 'AML and ID checks', stage: 2, date: '2026-06-30',
+    { id: 'uk-mlr', c: 'uk', reg: 'HM Treasury', topic: 'AML and ID checks', stage: 2, date: '2026-06-30', eff: '2026-06-30', effect: '30 Jun 2026',
       title: 'Money Laundering Regulations updated',
       short: 'Amendments to the Money Laundering Regulations took effect on 30 June 2026. Firms should now be working from updated policies, risk assessments and training.',
       changes: ['Most of the amendments came into force on 30 June 2026, 21 days after the regulations were made.', 'They aim to make customer due diligence more proportionate and risk-based.', 'A few cryptoasset provisions start later, in 2027.'],
       applies: ['aml'], who: 'Firms doing work in scope of the Money Laundering Regulations, such as conveyancing, trusts, company formation and tax advice.',
-      steps: ['Draft, 2 Sep 2025', 'Made, 9 Jun 2026', '30 Jun 2026'], effect: '30 Jun 2026',
-      src: 'https://www.legislation.gov.uk/ukdsi/2026/9780348281743', srcName: 'legislation.gov.uk'
-    },
-    {
-      id: 'uk-ai', c: 'uk', reg: 'SRA', topic: 'Technology and AI', stage: 'g', date: '2026-08-17',
+      steps: ['Draft, 2 Sep 2025', 'Made, 9 Jun 2026', '30 Jun 2026'],
+      src: 'https://www.legislation.gov.uk/ukdsi/2026/9780348281743', srcName: 'legislation.gov.uk' },
+    { id: 'uk-ai', c: 'uk', reg: 'SRA', topic: 'Technology and AI', stage: 'g', date: '2026-08-17', eff: null, effect: 'Applies now',
       title: 'Warning notice on the misuse of AI',
       short: 'The SRA has issued a warning notice on how solicitors and firms use AI in legal work.',
       changes: ['Sets out the SRA’s concerns about AI being misused in legal services.', 'Warning notices explain how the SRA expects firms to act. They are not new rules, but the SRA can take them into account.'],
       applies: ['all'], who: 'All SRA-regulated solicitors and firms.',
-      steps: null, effect: 'Applies now',
-      src: 'https://www.sra.org.uk/solicitors/guidance/topic/all-topics/', srcName: 'SRA guidance'
-    },
-    {
-      id: 'uk-money', c: 'uk', reg: 'SRA', topic: 'Client money', stage: 1, date: '2026-07-31',
+      steps: null, src: 'https://www.sra.org.uk/solicitors/guidance/topic/all-topics/', srcName: 'SRA' },
+    { id: 'uk-money', c: 'uk', reg: 'SRA', topic: 'Client money', stage: 1, date: '2026-07-31', eff: '2027-01-01', effect: 'early 2027',
       title: 'Annual accountants’ reports for every firm holding client money',
       short: 'Every firm that holds client money will file an accountants’ report each year. Larger firms must separate compliance officer roles from the person running the firm.',
       changes: ['An accountants’ report and firm declaration every year, whether qualified or not.', 'Firms over £600,000 turnover or holding over £2m client money cannot have a sole decision-maker who is also COLP or COFA.', 'Fixed penalties for late or missing reports from April 2027.', 'The Legal Services Board approved the changes on 31 July 2026.'],
       applies: ['money'], who: 'All SRA-regulated firms that hold client money. The COLP/COFA rules apply above £600,000 turnover or £2m client money.',
-      steps: ['Nov 2024', 'Approved, 31 Jul 2026', 'Early 2027'], effect: 'Early 2027',
-      src: 'https://www.sra.org.uk/news/news/press/safeguards-protect-client-money', srcName: 'SRA'
-    },
-    {
-      id: 'uk-complaints', c: 'uk', reg: 'SRA', topic: 'Complaints', stage: 0, date: '2026-07-03',
+      steps: ['Nov 2024', 'Approved, 31 Jul 2026', 'Early 2027'],
+      src: 'https://www.sra.org.uk/news/news/press/safeguards-protect-client-money', srcName: 'SRA' },
+    { id: 'uk-complaints', c: 'uk', reg: 'SRA', topic: 'Complaints', stage: 0, date: '2026-07-03', eff: null, effect: 'Not set yet',
       title: 'Clients to get a complaints timeline and regular updates',
       short: 'The SRA proposes that clients get a timeline for resolution when they first complain, then regular progress updates.',
       changes: ['A timeline for resolving the complaint when it is first made.', 'Regular updates while the complaint is open.', 'The consultation ran from 3 July to 1 September 2026. A decision is next.'],
       applies: ['all'], who: 'All SRA-regulated firms.',
-      steps: ['3 Jul 2026', '', ''], effect: 'Not set yet',
-      src: 'https://www.sra.org.uk/news/news/press/first-tier-complaints-consultation-2026', srcName: 'SRA'
-    },
-    {
-      id: 'uk-tplf', c: 'uk', reg: 'SRA', topic: 'Consumer claims', stage: 0, date: '2026-07-09',
+      steps: ['3 Jul 2026', '', ''], src: 'https://www.sra.org.uk/news/news/press/first-tier-complaints-consultation-2026', srcName: 'SRA' },
+    { id: 'uk-tplf', c: 'uk', reg: 'SRA', topic: 'Consumer claims', stage: 0, date: '2026-07-09', eff: null, effect: 'Not set yet',
       title: 'Stronger rules for litigation funding in consumer claims',
       short: 'The SRA proposes stronger requirements for solicitors who use or arrange third-party litigation funding in consumer claims.',
       changes: ['Stronger requirements on using or arranging third-party funding in consumer claims.', 'Part of the SRA’s wider consumer protection review.', 'The 10-week consultation has closed. A decision is next.'],
       applies: ['claims'], who: 'Firms running consumer claims with third-party litigation funding.',
-      steps: ['9 Jul 2026', '', ''], effect: 'Not set yet',
-      src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/', srcName: 'SRA'
-    },
-    {
-      id: 'uk-notify', c: 'uk', reg: 'SRA', topic: 'Firm management', stage: 0, date: '2026-06-19',
+      steps: ['9 Jul 2026', '', ''], src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/', srcName: 'SRA' },
+    { id: 'uk-notify', c: 'uk', reg: 'SRA', topic: 'Firm management', stage: 0, date: '2026-06-19', eff: null, effect: 'Not set yet',
       title: 'Telling the SRA earlier about mergers and new client accounts',
       short: 'The SRA wants firms to notify it about planned mergers and acquisitions, and when they start holding client money.',
       changes: ['Notify the SRA about planned mergers and acquisitions.', 'Notify the SRA when the firm starts holding client money.', 'Part of a move to spotting risk earlier.'],
       applies: ['all'], who: 'All SRA-regulated firms, especially those planning a merger or acquisition.',
-      steps: ['19 Jun 2026', '', ''], effect: 'Not set yet',
-      src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/', srcName: 'SRA'
-    },
-    {
-      id: 'uk-idv', c: 'uk', reg: 'Companies House', topic: 'AML and ID checks', stage: 2, date: '2025-11-18',
+      steps: ['19 Jun 2026', '', ''], src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/', srcName: 'SRA' },
+    { id: 'uk-idv', c: 'uk', reg: 'Companies House', topic: 'AML and ID checks', stage: 2, date: '2025-11-18', eff: '2025-11-18', effect: '18 Nov 2025',
       title: 'Directors and PSCs must verify their identity',
       short: 'New directors and people with significant control must verify their identity. Existing ones have until around 18 November 2026.',
       changes: ['New directors must verify before they can act.', 'Existing directors and PSCs have a 12-month transition, ending around 18 November 2026.', 'Applies to LLP members too.'],
       applies: ['corporate'], who: 'Firms acting for companies, and firms set up as LLPs or companies.',
-      steps: ['2023 Act', 'Date set, 2025', '18 Nov 2025'], effect: '18 Nov 2025',
-      src: 'https://www.gov.uk/guidance/verifying-your-identity-for-companies-house', srcName: 'GOV.UK'
-    },
-    {
-      id: 'uk-fraud', c: 'uk', reg: 'Home Office', topic: 'Fraud', stage: 2, date: '2025-09-01',
+      steps: ['2023 Act', 'Date set, 2025', '18 Nov 2025'], src: 'https://www.gov.uk/guidance/verifying-your-identity-for-companies-house', srcName: 'GOV.UK' },
+    { id: 'uk-fraud', c: 'uk', reg: 'Home Office', topic: 'Fraud', stage: 2, date: '2025-09-01', eff: '2025-09-01', effect: '1 Sep 2025',
       title: 'Failure to prevent fraud is now an offence',
       short: 'Large organisations can be prosecuted if someone working for them commits fraud to benefit the organisation. Reasonable prevention procedures are the defence.',
       changes: ['A new corporate offence under the Economic Crime and Corporate Transparency Act 2023.', 'Applies to organisations meeting two of: 250+ staff, £36m+ turnover, £18m+ total assets.'],
       applies: ['large'], who: 'Large law firms, and many of their corporate clients.',
-      steps: ['Oct 2023', 'Guidance, 6 Nov 2024', '1 Sep 2025'], effect: '1 Sep 2025',
-      src: 'https://www.gov.uk/government/publications/offence-of-failure-to-prevent-fraud-introduced-by-eccta', srcName: 'GOV.UK'
-    },
-    {
-      id: 'uk-fca', c: 'uk', reg: 'HM Treasury', topic: 'AML and ID checks', stage: 1, date: '2025-10-21',
+      steps: ['Oct 2023', 'Guidance, 6 Nov 2024', '1 Sep 2025'], src: 'https://www.gov.uk/government/publications/offence-of-failure-to-prevent-fraud-introduced-by-eccta', srcName: 'GOV.UK' },
+    { id: 'uk-fca', c: 'uk', reg: 'HM Treasury', topic: 'AML and ID checks', stage: 1, date: '2025-10-21', eff: '2029-01-01', effect: 'by 2029',
       title: 'The FCA will supervise law firms for AML',
       short: 'The SRA and other professional bodies will stop supervising AML. The FCA takes over once new legislation passes.',
       changes: ['The FCA becomes the single AML supervisor for legal and accountancy firms.', 'Needs new legislation, funding and a transition plan first.', 'Expected by 2029.'],
       applies: ['aml'], who: 'Every firm the SRA, CLC, CILEx Regulation or the Scottish and Northern Ireland law societies supervise for AML.',
-      steps: ['Jun 2023', 'Confirmed, 21 Oct 2025', 'By 2029'], effect: 'By 2029',
-      src: 'https://www.sra.org.uk/news/news/sra-update-145-aml-supervision-change/', srcName: 'SRA'
-    },
+      steps: ['Jun 2023', 'Confirmed, 21 Oct 2025', 'By 2029'], src: 'https://www.sra.org.uk/news/news/sra-update-145-aml-supervision-change/', srcName: 'SRA' },
 
-    {
-      id: 'au-tranche2', c: 'au', reg: 'AUSTRAC', topic: 'AML and ID checks', stage: 2, date: '2026-07-01',
+    { id: 'au-tranche2', c: 'au', reg: 'AUSTRAC', topic: 'AML and ID checks', stage: 2, date: '2026-07-01', eff: '2026-07-01', effect: '1 Jul 2026',
       title: 'Law firms now regulated for AML/CTF (Tranche 2)',
       short: 'Since 1 July 2026, lawyers and conveyancers who provide designated services must enrol with AUSTRAC and meet AML/CTF obligations.',
       changes: ['Enrol with AUSTRAC within 28 days of first providing a designated service.', 'Run an AML/CTF program, carry out customer due diligence and report suspicious matters.', 'Keep records for 7 years.'],
       applies: ['designated'], who: 'Law practices and conveyancers doing property transactions, setting up companies or trusts, or managing client funds.',
-      steps: ['Act passed, 10 Dec 2024', 'Rules made, 29 Aug 2025', '1 Jul 2026'], effect: '1 Jul 2026',
-      src: 'https://www.austrac.gov.au/sites/default/files/2025-07/AMLCTF_obligations_factsheet_for_tranche_2_REs.pdf', srcName: 'AUSTRAC'
-    },
-    {
-      id: 'au-rules', c: 'au', reg: 'AUSTRAC', topic: 'AML and ID checks', stage: 2, date: '2026-03-31',
+      steps: ['Act passed, 10 Dec 2024', 'Rules made, 29 Aug 2025', '1 Jul 2026'], src: 'https://www.austrac.gov.au/sites/default/files/2025-07/AMLCTF_obligations_factsheet_for_tranche_2_REs.pdf', srcName: 'AUSTRAC' },
+    { id: 'au-rules', c: 'au', reg: 'AUSTRAC', topic: 'AML and ID checks', stage: 2, date: '2026-03-31', eff: '2026-03-31', effect: '31 Mar 2026',
       title: 'New AML/CTF Rules in effect',
       short: 'AUSTRAC’s 2025 Rules set out what an AML/CTF program must contain, how to do customer due diligence and what to report.',
       changes: ['Replace the previous AML/CTF Rules.', 'Set the detail behind the 2024 changes to the AML/CTF Act.', 'Apply to law firms from 1 July 2026, when Tranche 2 starts.'],
       applies: ['designated'], who: 'All AML/CTF reporting entities, including law practices providing designated services.',
-      steps: ['Drafts, 2025', 'Made, 29 Aug 2025', '31 Mar 2026'], effect: '31 Mar 2026',
-      src: 'https://www.austrac.gov.au/amlctf-rules-release-and-upcoming-guidance', srcName: 'AUSTRAC'
-    },
-    {
-      id: 'au-costs', c: 'au', reg: 'Legal Services Council', topic: 'Costs and billing', stage: 0, date: '2026-04-24', dateLabel: 'Apr 2026',
+      steps: ['Drafts, 2025', 'Made, 29 Aug 2025', '31 Mar 2026'], src: 'https://www.austrac.gov.au/amlctf-rules-release-and-upcoming-guidance', srcName: 'AUSTRAC' },
+    { id: 'au-costs', c: 'au', reg: 'Legal Services Council', topic: 'Costs and billing', stage: 0, date: '2026-04-24', dateLabel: ['Apr', '2026'], eff: null, effect: 'Not set yet',
       title: 'New short-form costs disclosure forms and thresholds',
       short: 'A draft rule would replace the prescribed short-form costs disclosure forms and raise the thresholds for using them.',
       changes: ['New prescribed forms for short-form costs disclosure.', 'Higher lower and upper thresholds for short-form disclosure.', 'A draft amendment to the Uniform General Rules.'],
       applies: ['uniform'], who: 'Lawyers in Uniform Law states: New South Wales, Victoria and Western Australia.',
-      steps: ['2026', '', ''], effect: 'Not set yet',
-      src: 'https://legalservicescouncil.org.au/consultations/current-consultations.html', srcName: 'Legal Services Council'
-    },
-    {
-      id: 'au-adm', c: 'au', reg: 'OAIC', topic: 'Privacy and data', stage: 1, date: '2024-12-10',
+      steps: ['2026', '', ''], src: 'https://legalservicescouncil.org.au/consultations/current-consultations.html', srcName: 'Legal Services Council' },
+    { id: 'au-adm', c: 'au', reg: 'OAIC', topic: 'Privacy and data', stage: 1, date: '2024-12-10', eff: '2026-12-10', effect: '10 Dec 2026',
       title: 'Privacy policies must explain automated decisions',
       short: 'From 10 December 2026, privacy policies must say when computer programs make, or help make, decisions that significantly affect people.',
       changes: ['Describe the kinds of personal information used, and the kinds of decisions made, by automated means.', 'Applies where a decision could significantly affect someone’s rights or interests.', 'The OAIC has consulted on guidance.'],
       applies: ['turnover'], who: 'Organisations covered by the Privacy Act, generally those with turnover over $3m, that use automated decisions.',
-      steps: ['2024 Bill', 'Passed, 10 Dec 2024', '10 Dec 2026'], effect: '10 Dec 2026',
-      src: 'https://www.oaic.gov.au/engage-with-us/consultations/consultation-on-guidance-for-transparency-in-automated-decision-making', srcName: 'OAIC'
-    },
-    {
-      id: 'au-ransom', c: 'au', reg: 'Home Affairs', topic: 'Cyber security', stage: 2, date: '2025-05-30',
+      steps: ['2024 Bill', 'Passed, 10 Dec 2024', '10 Dec 2026'], src: 'https://www.oaic.gov.au/engage-with-us/consultations/consultation-on-guidance-for-transparency-in-automated-decision-making', srcName: 'OAIC' },
+    { id: 'au-ransom', c: 'au', reg: 'Home Affairs', topic: 'Cyber security', stage: 2, date: '2025-05-30', eff: '2025-05-30', effect: '30 May 2025',
       title: 'Ransomware payments must be reported within 72 hours',
       short: 'Businesses with turnover over $3m must report any ransomware or cyber extortion payment within 72 hours.',
       changes: ['Report to the Australian Signals Directorate within 72 hours of the payment.', 'The report covers the incident, the demand and the amount paid.'],
       applies: ['turnover'], who: 'Businesses with turnover over $3m, including many law practices.',
-      steps: ['Oct 2024', 'Passed, 29 Nov 2024', '30 May 2025'], effect: '30 May 2025',
-      src: 'https://www.homeaffairs.gov.au/cyber-security-subsite/files/factsheet-ransomware-payment-reporting.pdf', srcName: 'Home Affairs'
-    },
-    {
-      id: 'au-vic', c: 'au', reg: 'VLSB+C', topic: 'Client money', stage: 'g', date: '2026-01-01', dateLabel: '2026',
+      steps: ['Oct 2024', 'Passed, 29 Nov 2024', '30 May 2025'], src: 'https://www.homeaffairs.gov.au/cyber-security-subsite/files/factsheet-ransomware-payment-reporting.pdf', srcName: 'Home Affairs' },
+    { id: 'au-vic', c: 'au', reg: 'VLSB+C', topic: 'Client money', stage: 'g', date: '2026-01-01', dateLabel: ['2026', ''], eff: null, effect: 'Applies now',
       title: 'Victoria’s 2026 risk outlook for law practices',
       short: 'Victoria’s regulator names four risk areas for 2026: trust accounting, cyber security, costs disclosure and supervision.',
       changes: ['Principals cannot hand trust account responsibilities to bookkeepers or practice managers.', 'Report actual or suspected trust account irregularities as soon as possible.'],
       applies: ['trust', 'uniform'], who: 'Victorian law practices, especially those holding trust money.',
-      steps: null, effect: 'Applies now',
-      src: 'https://lsbc.vic.gov.au/lawyers/risk-outlook/risk-outlook-2026', srcName: 'VLSB+C'
-    }
+      steps: null, src: 'https://lsbc.vic.gov.au/lawyers/risk-outlook/risk-outlook-2026', srcName: 'VLSB+C' }
   ];
 
-  var state = { c: 'uk', q: '', stage: 'all', topic: 'all', firm: [], open: null, lastFocus: null };
+  var state = { c: 'uk', stage: 'all', topic: 'all', sort: 'recent', firm: [], shown: PAGE, lastFocus: null };
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s).replace(/[&<>"']/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); }
   function fmt(iso) { var p = iso.split('-'); return (+p[2]) + ' ' + MONTHS[+p[1] - 1] + ' ' + p[0]; }
   function byId(id) { for (var i = 0; i < R.length; i++) if (R[i].id === id) return R[i]; return null; }
   function mine() { return R.filter(function (r) { return r.c === state.c; }); }
-  function stageKey(r) { return r.stage === 'g' ? 'g' : String(r.stage); }
-  function dateLine(r) {
-    var d = r.dateLabel || fmt(r.date);
-    if (r.stage === 2) return 'In force since ' + r.effect;
-    if (r.stage === 1) return /^By /.test(r.effect) ? 'Expected ' + r.effect.toLowerCase() : 'Starts ' + r.effect.replace(/^Early/, 'early');
-    if (r.stage === 0) return 'Proposed ' + d;
-    return 'Published ' + d;
+  function sk(r) { return r.stage === 'g' ? 'g' : String(r.stage); }
+  function pill(r) { return '<span class="pill s' + sk(r) + '"><span class="dot"></span>' + STAGE[r.stage] + '</span>'; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function effectLine(r) {
+    if (r.stage === 1) return /^by /.test(r.effect) ? 'Expected ' + r.effect : 'Starts ' + r.effect;
+    if (r.stage === 0) return 'Start date not set';
+    return '';
   }
-  function pill(r) { return '<span class="pill s' + stageKey(r) + '"><span class="dot"></span>' + STAGE[r.stage] + '</span>'; }
-  function appliesHTML(r) {
-    var t = COUNTRY[state.c].appliesText;
-    return '<span class="applies">Applies to ' + r.applies.map(function (k) { return '<span class="tag' + (k === 'all' ? ' all' : '') + '">' + esc(t[k]) + '</span>'; }).join('') + '</span>';
+  function dateCol(r) {
+    if (r.dateLabel) return '<b>' + esc(r.dateLabel[0]) + '</b><small>' + esc(r.dateLabel[1]) + '</small>';
+    var p = r.date.split('-');
+    return '<b>' + (+p[2]) + ' ' + MONTHS[+p[1] - 1] + '</b><small>' + p[0] + '</small>';
   }
-  function hay(r) { return [r.reg, r.topic, r.title, r.short, r.who, r.changes.join(' '), STAGE[r.stage]].join(' ').toLowerCase(); }
-  var STOP = { the: 1, and: 1, what: 1, whats: 1, for: 1, are: 1, how: 1, when: 1, who: 1, does: 1, with: 1, about: 1, any: 1, this: 1, that: 1, new: 1, law: 1, firms: 1, firm: 1, changes: 1, change: 1, changing: 1, changed: 1, will: 1, need: 1, from: 1, have: 1, our: 1, now: 1, there: 1, year: 1, affect: 1, under: 1, next: 1 };
+  var STOP = { the: 1, and: 1, what: 1, whats: 1, for: 1, are: 1, how: 1, when: 1, who: 1, does: 1, with: 1, about: 1, any: 1, this: 1, that: 1, new: 1, law: 1, firms: 1, firm: 1, changes: 1, change: 1, changing: 1, changed: 1, will: 1, need: 1, from: 1, have: 1, our: 1, now: 1, there: 1, year: 1, affect: 1, under: 1 };
   function words(q) { return q.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9$£/ -]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 2 && !STOP[w]; }); }
+  function hay(r) { return [r.reg, r.topic, r.title, r.short, r.who, r.changes.join(' '), STAGE[r.stage]].join(' ').toLowerCase(); }
 
   function filtered() {
-    var ws = words(state.q);
-    return mine().filter(function (r) {
-      if (state.stage !== 'all' && stageKey(r) !== state.stage) return false;
+    var list = mine().filter(function (r) {
+      if (state.stage !== 'all' && sk(r) !== state.stage) return false;
       if (state.topic !== 'all' && r.topic !== state.topic) return false;
       if (state.firm.length && r.applies.indexOf('all') === -1 && !r.applies.some(function (k) { return state.firm.indexOf(k) !== -1; })) return false;
-      if (ws.length) { var h = hay(r); if (!ws.some(function (w) { return h.indexOf(w) !== -1; })) return false; }
       return true;
-    }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    });
+    list.sort(function (a, b) {
+      if (state.sort === 'soon') {
+        var ae = a.eff && a.eff >= TODAY ? a.eff : '9999', be = b.eff && b.eff >= TODAY ? b.eff : '9999';
+        if (ae !== be) return ae < be ? -1 : 1;
+      }
+      return a.date < b.date ? 1 : -1;
+    });
+    return list;
   }
 
   /* Render */
-  function renderCountry() {
+  function renderTop() {
     var C = COUNTRY[state.c];
     $('country-name').textContent = C.name;
     $('hero-title').textContent = 'What’s changed in ' + C.adj + ' legal regulation?';
-    $('hero-sub').textContent = C.sub;
-    $('q').placeholder = C.placeholder;
-    $('how-sources').textContent = 'We only use regulators, government and the published law: ' + C.sources;
-    $('checked').textContent = 'Last checked ' + fmt(TODAY);
+    if (!$('ask').classList.contains('answered')) $('q').placeholder = C.placeholder;
+    $('checked').textContent = 'Checked ' + fmt(TODAY);
+    $('sources-line').textContent = 'Sources: ' + C.sources + '.';
     document.querySelectorAll('[data-country]').forEach(function (b) {
       var on = b.getAttribute('data-country') === state.c;
       b.querySelector('.tick').style.visibility = on ? 'visible' : 'hidden';
@@ -621,90 +590,87 @@ button { cursor: pointer; }
     $('suggest').innerHTML = C.suggest.map(function (s, i) { return '<button type="button" data-suggest="' + i + '">' + esc(s.q) + '</button>'; }).join('');
   }
 
-  function renderInForce() {
-    var list = mine().filter(function (r) { return r.stage === 2; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 3);
-    var t = COUNTRY[state.c].appliesText;
-    $('inforce').innerHTML = list.map(function (r) {
-      return '<button type="button" class="hl" data-open="' + r.id + '"><span class="when"><span class="dot"></span>In force since ' + esc(r.effect) + '</span>' +
-        '<h3>' + esc(r.title) + '</h3><p>' + esc(r.reg) + ' · ' + r.applies.map(function (k) { return esc(t[k]); }).join(', ') + '</p></button>';
+  function renderKeyDates() {
+    var key = COUNTRY[state.c].key;
+    $('kd').style.gridTemplateColumns = key.map(function (k) { return k === 'today' ? '84px' : 'minmax(0, 1fr)'; }).join(' ');
+    var tp = TODAY.split('-');
+    $('kd').innerHTML = key.map(function (k) {
+      if (k === 'today') return '<div class="today" aria-label="Today"><b>Today</b><small>' + (+tp[2]) + ' ' + MONTHS[+tp[1] - 1] + '</small></div>';
+      return '<button type="button" class="kd' + (k.future ? ' future' : '') + '" data-open="' + k.id + '"><span class="dot"></span>' +
+        '<span class="lbl">' + (k.future ? 'Coming up' : 'In force') + '</span><b>' + esc(k.d) + '</b><span class="t">' + esc(k.t) + '</span><small>' + esc(k.reg) + '</small></button>';
     }).join('');
-    var s = COUNTRY[state.c].soon[0];
-    $('next').innerHTML = s ? '<button type="button" class="next" data-open="' + s.id + '"><span class="lbl">Next up</span><b>' + esc(s.label) + '</b><span>' + esc(s.text) + '</span><span>View →</span></button>' : '';
   }
 
   function renderFilters() {
     var all = mine();
     var counts = { all: all.length, '2': 0, '1': 0, '0': 0, g: 0 };
-    all.forEach(function (r) { counts[stageKey(r)]++; });
-    var tabs = [['all', 'All'], ['2', 'In force'], ['1', 'Coming up'], ['0', 'Proposed'], ['g', 'Guidance']];
+    all.forEach(function (r) { counts[sk(r)]++; });
+    var tabs = [['all', 'All'], ['2', 'In force'], ['1', 'Decided'], ['0', 'Proposed'], ['g', 'Guidance']];
     $('tabs').innerHTML = tabs.filter(function (t) { return t[0] === 'all' || counts[t[0]]; }).map(function (t) {
-      return '<button type="button" data-stage="' + t[0] + '" aria-pressed="' + (state.stage === t[0]) + '">' + t[1] + ' <span class="n">' + counts[t[0]] + '</span></button>';
+      return '<button type="button" data-stage="' + t[0] + '" aria-pressed="' + (state.stage === t[0]) + '">' + t[1] + '<span class="n">' + counts[t[0]] + '</span></button>';
     }).join('');
     var topics = {};
     all.forEach(function (r) { topics[r.topic] = true; });
     var tl = Object.keys(topics).sort();
     if (state.topic !== 'all' && tl.indexOf(state.topic) === -1) state.topic = 'all';
-    $('topic').innerHTML = '<option value="all">All topics</option>' + tl.map(function (t) { return '<option' + (t === state.topic ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('');
-    var tick = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
-    $('firm').innerHTML = COUNTRY[state.c].firm.map(function (f) {
+    $('topic').innerHTML = '<option value="all">All</option>' + tl.map(function (t) { return '<option' + (t === state.topic ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('');
+    $('sort').value = state.sort;
+    var tick = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+    var any = state.stage !== 'all' || state.topic !== 'all' || state.firm.length || state.sort !== 'recent';
+    $('firm').innerHTML = '<span class="firm-label">My firm does this:</span>' + COUNTRY[state.c].firm.map(function (f) {
       return '<button type="button" class="fchip" data-firm="' + f.k + '" aria-pressed="' + (state.firm.indexOf(f.k) !== -1) + '">' + tick + esc(f.label) + '</button>';
-    }).join('');
+    }).join('') + (any ? '<button type="button" class="clear" id="clear">Clear</button>' : '');
   }
 
   function renderList() {
     var list = filtered();
-    var C = COUNTRY[state.c];
-    var bits = [];
-    if (state.stage !== 'all') bits.push(STAGE[state.stage === 'g' ? 'g' : +state.stage].toLowerCase());
-    if (state.topic !== 'all') bits.push('about ' + state.topic.toLowerCase());
-    var firmLabels = C.firm.filter(function (f) { return state.firm.indexOf(f.k) !== -1; }).map(function (f) { return f.label.charAt(0).toLowerCase() + f.label.slice(1); });
-    var text = '<span><b>' + list.length + ' ' + (list.length === 1 ? 'change' : 'changes') + '</b>';
-    if (bits.length) text += ', ' + esc(bits.join(', '));
-    if (firmLabels.length) text += ', for firms that ' + esc(firmLabels.length > 1 ? firmLabels.slice(0, -1).join(', ') + ' and ' + firmLabels[firmLabels.length - 1] : firmLabels[0]);
-    if (state.q.trim()) text += ', matching “' + esc(state.q.trim()) + '”';
-    text += '</span>';
-    var any = state.stage !== 'all' || state.topic !== 'all' || state.firm.length || state.q.trim();
-    $('summary').innerHTML = text + (any ? '<button type="button" id="clear">Clear filters</button>' : '');
-
-    var arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
-    $('list').innerHTML = list.length ? list.map(function (r) {
-      return '<button type="button" class="card" data-open="' + r.id + '">' +
-        '<span class="card-top">' + pill(r) + '<span>' + esc(r.reg) + ' · ' + esc(dateLine(r)) + '</span></span>' +
+    var A = COUNTRY[state.c].applies;
+    var arrow = '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+    if (!list.length) { $('list').innerHTML = '<div class="empty">No changes match. Try removing a filter.</div>'; return; }
+    var rows = list.slice(0, state.shown).map(function (r) {
+      var eff = effectLine(r);
+      return '<button type="button" class="row" data-open="' + r.id + '">' +
+        '<span class="when">' + dateCol(r) + '</span>' +
+        '<span class="what"><span class="meta">' + pill(r) + '<span>' + esc(r.reg) + (eff ? ' · ' + esc(eff) : '') + '</span></span>' +
         '<h3>' + esc(r.title) + '</h3><p>' + esc(r.short) + '</p>' +
-        '<span class="card-foot">' + appliesHTML(r) + '<span class="open-link">Read more ' + arrow + '</span></span></button>';
-    }).join('') : '<div class="empty">No changes match these filters. Try fewer, or <button type="button" id="clear2" class="btn" style="margin-left:6px">clear them</button></div>';
+        '<span class="applies">Applies to <b>' + r.applies.map(function (k) { return esc(A[k]); }).join(', ') + '</b></span></span>' +
+        arrow + '</button>';
+    }).join('');
+    var left = list.length - state.shown;
+    $('list').innerHTML = rows + (left > 0 ? '<button type="button" class="more-btn" id="more">Show ' + Math.min(left, PAGE) + ' more</button>' : '');
   }
 
-  function renderAll() { renderCountry(); renderInForce(); renderFilters(); renderList(); }
+  function renderAll() { renderTop(); renderKeyDates(); renderFilters(); renderList(); }
 
   /* Drawer */
   function openDrawer(id) {
     var r = byId(id);
     if (!r) return;
     state.lastFocus = document.activeElement;
-    var t = COUNTRY[r.c].appliesText;
-    var timeline = '';
+    var A = COUNTRY[r.c].applies;
+    var eff = r.stage === 1 ? cap(r.effect) : r.effect;
+    var timeline;
     if (r.steps) {
       var labels = ['Proposed', 'Decided', 'In force'];
-      var reached = r.stage;
       timeline = '<div class="d-sec"><h4>Where it is</h4><div class="timeline">' + labels.map(function (l, i) {
-        return '<div class="t-step' + (i <= reached ? ' on' : '') + (i === reached ? ' now' : '') + '"><b>' + l + '</b><span>' + esc(r.steps[i] || '—') + '</span></div>';
+        return '<div class="t-step' + (i <= r.stage ? ' on' : '') + (i === r.stage ? ' now' : '') + '"><b>' + l + '</b><span>' + esc(r.steps[i] || '—') + '</span></div>';
       }).join('') + '</div></div>';
     } else {
       timeline = '<p class="note">This is guidance, not a new rule. It explains how the regulator expects firms to act.</p>';
     }
+    var headDate = r.dateLabel ? r.dateLabel.join(' ').trim() : fmt(r.date);
     $('drawer').innerHTML =
       '<div class="drawer-bar"><span class="crumb">' + esc(COUNTRY[r.c].name) + ' · ' + esc(r.reg) + '</span>' +
       '<button type="button" class="x" id="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>' +
       '<div class="drawer-body">' +
-        '<div class="d-head"><div class="card-top">' + pill(r) + '<span>' + esc(dateLine(r)) + '</span></div><h2 id="d-title">' + esc(r.title) + '</h2><p class="short">' + esc(r.short) + '</p></div>' +
-        '<div class="who"><h4 style="margin:0;font-size:12px;font-family:var(--mono);font-weight:400;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)">Who it applies to</h4><p>' + esc(r.who) + '</p>' +
-          '<div class="applies">' + r.applies.map(function (k) { return '<span class="tag' + (k === 'all' ? ' all' : '') + '">' + esc(t[k]) + '</span>'; }).join('') + '</div></div>' +
+        '<div class="d-head"><div class="meta">' + pill(r) + '<span>' + esc(headDate) + '</span></div><h2 id="d-title">' + esc(r.title) + '</h2><p class="short">' + esc(r.short) + '</p></div>' +
+        '<div class="who"><h4>Who it applies to</h4><p>' + esc(r.who) + '</p>' +
+          '<div class="tags">' + r.applies.map(function (k) { return '<span class="tag' + (k === 'all' ? ' all' : '') + '">' + esc(A[k]) + '</span>'; }).join('') + '</div></div>' +
         timeline +
         '<div class="d-sec"><h4>What changes</h4><ul>' + r.changes.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="src-row"><span>Takes effect: ' + esc(r.effect) + ' · Checked ' + fmt(TODAY) + '</span>' +
+        '<div class="src-row"><span>Takes effect: ' + esc(eff) + ' · Checked ' + fmt(TODAY) + '</span>' +
           '<a class="btn" href="' + esc(r.src) + '" target="_blank" rel="noopener">Read on ' + esc(r.srcName) + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></div>' +
-        '<div class="hook"><p>Getting your firm ready for changes like this? Legl helps law firms onboard clients, run AML checks and take payments in one place.</p><div class="row"><a class="btn btn-dark" href="https://www.legl.com" target="_blank" rel="noopener">See how Legl helps</a></div></div>' +
+        '<div class="hook"><p>Getting your firm ready for changes like this? Legl helps law firms onboard clients, run AML checks and take payments in one place.</p><div class="row-end"><a class="btn btn-dark" href="https://www.legl.com" target="_blank" rel="noopener">See how Legl helps</a></div></div>' +
       '</div>';
     $('drawer').hidden = false;
     $('scrim').hidden = false;
@@ -718,7 +684,7 @@ button { cursor: pointer; }
     if (state.lastFocus && state.lastFocus.focus) state.lastFocus.focus();
   }
 
-  /* Ask */
+  /* Ask: the answer appears inside the box */
   function answerFor(q, preset) {
     var C = COUNTRY[state.c];
     var intent = preset && preset.intent;
@@ -728,11 +694,12 @@ button { cursor: pointer; }
       else if (/consult|propos|draft/.test(lower)) intent = 'proposed';
     }
     if (intent === 'soon') {
-      return { html: '<p>' + (C.soon.length === 1 ? 'The next date to know:' : 'The next dates to know:') + '</p><ul>' + C.soon.map(function (s) { return '<li><b>' + esc(s.label) + '</b>: ' + esc(s.text) + '</li>'; }).join('') + '</ul>', ids: C.soon.map(function (s) { return s.id; }) };
+      var f = C.key.filter(function (k) { return k !== 'today' && k.future; });
+      return { html: '<ul>' + f.map(function (k) { return '<li><b>' + esc(k.d) + '</b>: ' + esc(k.t) + ' <span class="sub">(' + esc(k.reg) + ')</span></li>'; }).join('') + '</ul>', ids: f.map(function (k) { return k.id; }) };
     }
     if (intent === 'proposed') {
       var p = mine().filter(function (r) { return r.stage === 0; });
-      return { html: '<p>' + p.length + ' proposal' + (p.length === 1 ? ' is' : 's are') + ' being considered:</p><ul>' + p.map(function (r) { return '<li><b>' + esc(r.title) + '</b> <span class="sub">(' + esc(r.reg) + ')</span></li>'; }).join('') + '</ul><p class="sub">None of these have a start date yet.</p>', ids: p.map(function (r) { return r.id; }) };
+      return { html: '<p>' + p.length + ' proposal' + (p.length === 1 ? ' is' : 's are') + ' open or awaiting a decision:</p><ul>' + p.map(function (r) { return '<li>' + esc(r.title) + ' <span class="sub">(' + esc(r.reg) + ')</span></li>'; }).join('') + '</ul>', ids: p.map(function (r) { return r.id; }) };
     }
     var picked;
     if (preset && preset.ids) picked = preset.ids.map(byId);
@@ -744,13 +711,9 @@ button { cursor: pointer; }
         return { r: r, s: s };
       }).filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s; }).slice(0, 3).map(function (x) { return x.r; });
     }
-    if (!picked.length) return { html: '<p>Nothing in the tracker covers that yet. It only answers from changes it holds, so it won’t guess.</p><p class="sub">Try AML, client money, complaints or what’s coming up.</p>', ids: [] };
+    if (!picked.length) return { html: '<p>Nothing in the tracker covers that yet. It only answers from changes it holds, so it won’t guess.</p>', ids: [] };
     return {
-      html: picked.map(function (r, i) {
-        var h = '<p><b>' + esc(r.title) + '</b> <span class="sub">(' + esc(r.reg) + ', ' + STAGE[r.stage].toLowerCase() + ')</span></p><p>' + esc(r.short) + '</p>';
-        if (i === 0) h += '<p class="sub">Applies to: ' + esc(r.who) + '</p>';
-        return h;
-      }).join(''),
+      html: picked.map(function (r) { return '<p><b>' + esc(r.title) + '.</b> ' + esc(r.short) + '</p>'; }).join(''),
       ids: picked.map(function (r) { return r.id; })
     };
   }
@@ -758,29 +721,39 @@ button { cursor: pointer; }
   function ask(q, preset) {
     q = q.trim();
     if (!q) return;
-    var box = $('answer');
-    box.hidden = false;
-    box.className = 'answer';
-    var top = '<div class="answer-top"><span>' + esc(q) + '</span><button type="button" id="answer-close">Close</button></div>';
-    box.innerHTML = top + '<p class="thinking">Reading the tracker…</p>';
+    $('ask').classList.add('answered');
+    $('qa').hidden = false;
+    $('qa-q').textContent = q;
+    $('qa-a').innerHTML = '<p class="thinking">Reading the tracker…</p>';
+    $('q').value = '';
+    $('q').rows = 1;
+    $('q').placeholder = 'Ask a follow-up';
+    $('suggest').hidden = true;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setTimeout(function () {
       var a = answerFor(q, preset);
-      var src = a.ids.length ? '<div class="answer-src"><span>Sources</span>' + a.ids.map(function (id) {
+      var src = a.ids.length ? '<div class="qa-src"><span>Sources</span>' + a.ids.map(function (id) {
         var r = byId(id);
-        return '<button type="button" class="src-link" data-open="' + id + '">' + esc(r.title.length > 44 ? r.title.slice(0, 42) + '…' : r.title) + '</button>';
+        return '<button type="button" class="src-link" data-open="' + id + '">' + esc(r.title.length > 40 ? r.title.slice(0, 38) + '…' : r.title) + '</button>';
       }).join('') + '</div>' : '';
-      box.innerHTML = top + '<div class="answer-body">' + a.html + '</div>' + src;
+      $('qa-a').innerHTML = a.html + src;
     }, reduce ? 0 : 450);
+  }
+  function resetAsk() {
+    $('ask').classList.remove('answered');
+    $('qa').hidden = true;
+    $('q').rows = 2;
+    $('q').value = '';
+    $('q').placeholder = COUNTRY[state.c].placeholder;
+    $('suggest').hidden = false;
   }
 
   /* Country */
   function setCountry(c) {
     if (!COUNTRY[c]) return;
-    state.c = c; state.stage = 'all'; state.topic = 'all'; state.firm = []; state.q = '';
-    $('q').value = '';
-    $('answer').hidden = true;
+    state.c = c; state.stage = 'all'; state.topic = 'all'; state.firm = []; state.sort = 'recent'; state.shown = PAGE;
     try { localStorage.setItem('legl-tracker-country', c); } catch (e) {}
+    resetAsk();
     renderAll();
   }
   function toggleMenu(open) {
@@ -790,10 +763,10 @@ button { cursor: pointer; }
 
   /* Events */
   $('country-btn').addEventListener('click', function (e) { e.stopPropagation(); toggleMenu($('country-menu').hidden); });
-  $('q').addEventListener('input', function (e) { state.q = e.target.value; renderList(); });
   $('q').addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(e.target.value, null); } });
   $('ask').addEventListener('submit', function (e) { e.preventDefault(); ask($('q').value, null); });
-  $('topic').addEventListener('change', function (e) { state.topic = e.target.value; renderList(); });
+  $('topic').addEventListener('change', function (e) { state.topic = e.target.value; state.shown = PAGE; renderFilters(); renderList(); });
+  $('sort').addEventListener('change', function (e) { state.sort = e.target.value; state.shown = PAGE; renderFilters(); renderList(); });
   $('scrim').addEventListener('click', closeDrawer);
 
   document.addEventListener('click', function (e) {
@@ -803,22 +776,20 @@ button { cursor: pointer; }
     if (cb) { toggleMenu(false); setCountry(cb.getAttribute('data-country')); return; }
     var sg = t.closest('[data-suggest]');
     if (sg) { var s = COUNTRY[state.c].suggest[+sg.getAttribute('data-suggest')]; ask(s.q, s); return; }
-    if (t.closest('#answer-close')) { $('answer').hidden = true; return; }
+    if (t.closest('#qa-x')) { resetAsk(); $('q').focus(); return; }
     var op = t.closest('[data-open]');
     if (op) { openDrawer(op.getAttribute('data-open')); return; }
     if (t.closest('#close')) { closeDrawer(); return; }
     var st = t.closest('[data-stage]');
-    if (st) { state.stage = st.getAttribute('data-stage'); renderFilters(); renderList(); return; }
+    if (st) { state.stage = st.getAttribute('data-stage'); state.shown = PAGE; renderFilters(); renderList(); return; }
     var fm = t.closest('[data-firm]');
     if (fm) {
       var k = fm.getAttribute('data-firm'), i = state.firm.indexOf(k);
       if (i === -1) state.firm.push(k); else state.firm.splice(i, 1);
-      renderFilters(); renderList(); return;
+      state.shown = PAGE; renderFilters(); renderList(); return;
     }
-    if (t.closest('#clear') || t.closest('#clear2')) {
-      state.stage = 'all'; state.topic = 'all'; state.firm = []; state.q = ''; $('q').value = '';
-      renderFilters(); renderList(); return;
-    }
+    if (t.closest('#clear')) { state.stage = 'all'; state.topic = 'all'; state.firm = []; state.sort = 'recent'; state.shown = PAGE; renderFilters(); renderList(); return; }
+    if (t.closest('#more')) { state.shown += PAGE; renderList(); return; }
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { toggleMenu(false); if (!$('drawer').hidden) closeDrawer(); }

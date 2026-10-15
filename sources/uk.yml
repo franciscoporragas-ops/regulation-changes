@@ -1,0 +1,50 @@
+# What the agent watches for the UK. Official sources only.
+# how: feed (Atom/RSS), api, or page (the agent reads the page and looks for new items).
+# The agent checks every URL on each run and opens an issue if one stops working.
+
+- regulator: SRA
+  covers: Rules, consultations, decisions and guidance for solicitors and firms
+  watch:
+    - { how: page, url: "https://www.sra.org.uk/sra/consultations/consultation-listing/" }
+    - { how: page, url: "https://www.sra.org.uk/solicitors/guidance/topic/all-topics/" }
+    - { how: page, url: "https://www.sra.org.uk/home/hot-topics/consumer-protection-review/" }
+
+- regulator: Legal Services Board
+  covers: Approvals that turn into SRA, CLC and CILEx rules
+  watch:
+    - { how: page, url: "https://legalservicesboard.org.uk/" }
+
+- regulator: HM Treasury
+  covers: Money Laundering Regulations and AML supervision
+  watch:
+    - { how: feed, url: "https://www.gov.uk/search/all.atom?organisations%5B%5D=hm-treasury&keywords=money+laundering" }
+
+- regulator: FCA
+  covers: AML supervision, which is moving to the FCA
+  watch:
+    - { how: page, url: "https://www.fca.org.uk/news" }
+
+- regulator: Companies House
+  covers: Identity verification and register changes
+  watch:
+    - { how: feed, url: "https://www.gov.uk/search/all.atom?organisations%5B%5D=companies-house" }
+
+- regulator: OFSI
+  covers: Financial sanctions
+  watch:
+    - { how: feed, url: "https://www.gov.uk/search/all.atom?organisations%5B%5D=office-of-financial-sanctions-implementation" }
+
+- regulator: Home Office
+  covers: Economic crime, including failure to prevent fraud
+  watch:
+    - { how: feed, url: "https://www.gov.uk/search/all.atom?organisations%5B%5D=home-office&keywords=economic+crime" }
+
+- regulator: ICO
+  covers: Data protection
+  watch:
+    - { how: page, url: "https://ico.org.uk/" }
+
+- regulator: legislation.gov.uk
+  covers: The law itself, as made
+  watch:
+    - { how: feed, url: "https://www.legislation.gov.uk/new/data.feed" }
