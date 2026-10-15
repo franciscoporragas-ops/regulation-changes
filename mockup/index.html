@@ -1,1178 +1,715 @@
 <title>Legl regulation tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout: navy app bar → tabs (Browse / Ask) → search, coming-up date strip, filters → change list + sticky detail pane (detail becomes a sheet on phones) */
+/* Layout: one calm column. Intro → 1 sources → 2 gathering → 3 storage → 4 the tool itself. Tokens follow the new legl.com (Geist, near-black buttons, mint surfaces, soft radii). */
 :root {
-  --bg: #F4F5F7;
-  --surface: #FFFFFF;
-  --surface-2: #EEF0F4;
-  --heading: #091C42;
-  --fg: #253658;
-  --muted: #5B6882;
-  --line: #DCE0E7;
-  --accent: #01B88E;
-  --accent-ink: #FFFFFF;
-  --accent-text: #00805F;
-  --accent-soft: #E2F6EF;
-  --bar: #091C42;
-  --bar-fg: #FFFFFF;
-  --bar-muted: #AEB9D1;
-  --bar-line: #253E6B;
-  --bar-chip: #15294F;
-  --info: #3558D6;
-  --info-soft: #E8EDFE;
-  --warn: #8A5300;
-  --warn-soft: #FCEFD6;
-  --scrim: rgba(9, 28, 66, 0.45);
-  --font: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --radius: 4px;
+  --bg: #FFFFFF;
+  --soft: #F5FCFB;
+  --mist: #F4F5F7;
+  --line: #E6E8EC;
+  --ink: #1B1B1B;
+  --body: #444444;
+  --muted: #6B7280;
+  --green: #018568;
+  --green-surface: #E6F8F4;
+  --amber: #8A5C00;
+  --amber-surface: #FFF8EB;
+  --indigo: #4F46E5;
+  --indigo-surface: #EFEEFF;
+  --btn: #1B1B1B;
+  --btn-ink: #FFFFFF;
+  --logo: #01B88E;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.06);
+  --font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #07132D;
-    --surface: #0D1F45;
-    --surface-2: #142A56;
-    --heading: #FFFFFF;
-    --fg: #D3DAE8;
-    --muted: #9AA6BF;
-    --line: #22385F;
-    --accent: #01B88E;
-    --accent-ink: #04221B;
-    --accent-text: #3FD3AE;
-    --accent-soft: #0B3A3A;
-    --bar: #040D22;
-    --bar-fg: #FFFFFF;
-    --bar-muted: #9AA6BF;
-    --bar-line: #1C3158;
-    --bar-chip: #0F1F42;
-    --info: #9BB2FF;
-    --info-soft: #1A2A5E;
-    --warn: #F3B866;
-    --warn-soft: #3A2B12;
-    --scrim: rgba(0, 0, 0, 0.6);
+    --bg: #111213;
+    --soft: #15191A;
+    --mist: #1A1C1F;
+    --line: #2A2D31;
+    --ink: #F2F2F2;
+    --body: #C9CCD1;
+    --muted: #9AA0A8;
+    --green: #4DCDB1;
+    --green-surface: #10291F;
+    --amber: #F0C060;
+    --amber-surface: #2A2110;
+    --indigo: #A7A3F2;
+    --indigo-surface: #1F1D3A;
+    --btn: #F2F2F2;
+    --btn-ink: #111213;
+    --logo: #FFFFFF;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #07132D;
-  --surface: #0D1F45;
-  --surface-2: #142A56;
-  --heading: #FFFFFF;
-  --fg: #D3DAE8;
-  --muted: #9AA6BF;
-  --line: #22385F;
-  --accent: #01B88E;
-  --accent-ink: #04221B;
-  --accent-text: #3FD3AE;
-  --accent-soft: #0B3A3A;
-  --bar: #040D22;
-  --bar-fg: #FFFFFF;
-  --bar-muted: #9AA6BF;
-  --bar-line: #1C3158;
-  --bar-chip: #0F1F42;
-  --info: #9BB2FF;
-  --info-soft: #1A2A5E;
-  --warn: #F3B866;
-  --warn-soft: #3A2B12;
-  --scrim: rgba(0, 0, 0, 0.6);
+  --bg: #111213;
+  --soft: #15191A;
+  --mist: #1A1C1F;
+  --line: #2A2D31;
+  --ink: #F2F2F2;
+  --body: #C9CCD1;
+  --muted: #9AA0A8;
+  --green: #4DCDB1;
+  --green-surface: #10291F;
+  --amber: #F0C060;
+  --amber-surface: #2A2110;
+  --indigo: #A7A3F2;
+  --indigo-surface: #1F1D3A;
+  --btn: #F2F2F2;
+  --btn-ink: #111213;
+  --logo: #FFFFFF;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body {
+  margin: 0;
   background: var(--bg);
-  color: var(--fg);
+  color: var(--body);
   font-family: var(--font);
   font-size: 16px;
-  line-height: 1.4;
-  margin: 0;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3, h4 { color: var(--heading); font-weight: 700; margin: 0; text-wrap: balance; }
-a { color: var(--accent-text); }
-button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4 { color: var(--ink); font-weight: 600; margin: 0; letter-spacing: -0.02em; text-wrap: balance; line-height: 1.15; }
+p { margin: 0; }
+a { color: var(--green); text-underline-offset: 3px; }
+button, input, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.tnum { font-variant-numeric: tabular-nums; }
-.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; }
-@media (min-width: 700px) { .wrap { padding-inline: 24px; } }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-size: 13px; letter-spacing: 0; font-variant-numeric: tabular-nums; }
 
-/* App bar */
-.bar { background: var(--bar); color: var(--bar-fg); }
-.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding-block: 14px; }
-.brand { display: flex; align-items: center; gap: 12px; margin-right: auto; min-width: 0; }
-.brand svg { width: 40px; height: auto; flex: none; }
-.brand .divider { width: 1px; height: 22px; background: var(--bar-line); }
-.brand .name { font-weight: 700; font-size: 17px; white-space: nowrap; }
-.bar-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.seg { display: inline-flex; background: var(--bar-chip); border: 1px solid var(--bar-line); border-radius: var(--radius); padding: 2px; }
-.seg button { background: transparent; border: 0; color: var(--bar-muted); padding: 6px 12px; border-radius: 3px; font-size: 14px; font-weight: 700; }
-.seg button[aria-pressed="true"] { background: var(--accent); color: #FFFFFF; }
-.seg-label { font-size: 12px; color: var(--bar-muted); letter-spacing: 0.04em; text-transform: uppercase; margin-right: 4px; }
-.bar-btn { background: transparent; border: 1px solid var(--bar-line); color: var(--bar-fg); padding: 7px 12px; border-radius: var(--radius); font-size: 14px; font-weight: 700; }
-.bar-btn:hover { border-color: var(--bar-muted); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; }
+.narrow { max-width: 760px; }
 
-.notice { background: var(--warn-soft); color: var(--warn); font-size: 13px; }
-.notice .wrap { padding-block: 8px; display: flex; flex-wrap: wrap; gap: 4px 16px; }
-.notice strong { font-weight: 700; }
+/* Nav */
+.nav { border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; }
+.nav-brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 500; }
+.nav-brand svg { width: 44px; height: auto; color: var(--logo); }
+.nav-brand .sep { width: 1px; height: 18px; background: var(--line); }
+.nav-tag { font-size: 13px; color: var(--muted); }
 
-/* Tabs */
-.tabs { border-bottom: 1px solid var(--line); background: var(--surface); }
-.tabs .wrap { display: flex; gap: 24px; }
-.tab { background: none; border: 0; padding: 14px 2px 12px; font-weight: 700; font-size: 15px; color: var(--muted); border-bottom: 3px solid transparent; }
-.tab[aria-selected="true"] { color: var(--heading); border-bottom-color: var(--accent); }
+/* Intro */
+.intro { padding-block: 72px 56px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); }
+.intro h1 { font-size: clamp(34px, 5.4vw, 56px); letter-spacing: -0.035em; margin-top: 14px; max-width: 16ch; }
+.intro .lede { margin-top: 18px; font-size: 18px; max-width: 58ch; color: var(--body); }
+.needs { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.need { background: var(--soft); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px; }
+.need h3 { font-size: 16px; }
+.need p { margin-top: 6px; font-size: 14px; color: var(--muted); }
 
-main { padding-block: 24px 48px; }
+/* Section shell */
+.step { padding-block: 64px; border-top: 1px solid var(--line); }
+.step-head { display: grid; gap: 10px; max-width: 640px; }
+.step-num { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.step-head h2 { font-size: clamp(26px, 3.4vw, 36px); letter-spacing: -0.03em; }
+.step-head p { font-size: 17px; }
 
-/* Search */
-.search { position: relative; }
-.search input {
-  width: 100%; padding: 14px 16px 14px 46px; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--surface); font-size: 17px;
+/* 1 Sources */
+.sources { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.src-col { border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+.src-col h3 { font-size: 15px; padding: 14px 18px; background: var(--mist); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.src-col h3 span { font-weight: 400; color: var(--muted); font-size: 13px; }
+.src-col ul { list-style: none; margin: 0; padding: 0; }
+.src-col li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.src-col li:last-child { border-bottom: 0; }
+.src-col li b { color: var(--ink); font-weight: 500; font-size: 15px; }
+.src-col li small { grid-column: 1; font-size: 13px; color: var(--muted); }
+.src-col li .how { grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+.src-col .more { padding: 12px 18px; font-size: 13px; color: var(--muted); background: var(--soft); }
+.how { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.how.api { color: var(--green); border-color: var(--green); }
+.how.feed { color: var(--indigo); border-color: var(--indigo); }
+.aside-note { margin-top: 20px; display: grid; gap: 10px; }
+.aside-note p { font-size: 14px; color: var(--muted); max-width: 70ch; }
+.aside-note b { color: var(--ink); font-weight: 500; }
+
+/* 2 Gathering */
+.flow { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; counter-reset: flow; }
+.flow-step { position: relative; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; background: var(--bg); }
+.flow-step .n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.flow-step h3 { font-size: 18px; margin-top: 10px; }
+.flow-step p { font-size: 14px; margin-top: 6px; color: var(--muted); }
+.flow-step.human { background: var(--green-surface); border-color: transparent; }
+.flow-step.human .n, .flow-step.human p { color: var(--green); }
+.flow-foot { margin-top: 16px; font-size: 14px; color: var(--muted); }
+.flow-foot b { color: var(--ink); font-weight: 500; }
+
+/* 3 Storage */
+.store { margin-top: 32px; display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
+@media (min-width: 860px) { .store { grid-template-columns: 5fr 7fr; gap: 40px; } }
+.rules { display: grid; gap: 18px; }
+.rules div h3 { font-size: 16px; }
+.rules div p { font-size: 15px; margin-top: 4px; color: var(--muted); }
+.record { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg); overflow: hidden; min-width: 0; }
+.record-top { padding: 14px 18px; background: var(--mist); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+.record dl { margin: 0; display: grid; grid-template-columns: 132px 1fr; }
+.record dt, .record dd { padding: 10px 18px; border-bottom: 1px solid var(--line); margin: 0; font-size: 14px; }
+.record dt { color: var(--muted); font-family: var(--mono); font-size: 12px; padding-top: 12px; }
+.record dd { color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+.record dd.hist { display: grid; gap: 4px; }
+.record dd.hist span { color: var(--body); }
+.record dl > :nth-last-child(-n+2) { border-bottom: 0; }
+@media (max-width: 520px) {
+  .record dl { grid-template-columns: 1fr; }
+  .record dt { border-bottom: 0; padding-bottom: 0; }
 }
-.search input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
-.search svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
 
-/* Coming up strip */
-.section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.upcoming { margin-top: 24px; display: grid; gap: 10px; }
-.upcoming-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.upcoming-head span:last-child { font-size: 13px; color: var(--muted); }
-.strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-.due {
-  text-align: left; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px;
+/* 4 The tool */
+.tool { margin-top: 32px; background: var(--soft); border: 1px solid var(--line); border-radius: var(--r-xl); padding-block: 56px 40px; padding-inline: 16px; }
+.tool-inner { max-width: 720px; margin: 0 auto; display: grid; gap: 20px; }
+.tool-hero { text-align: center; display: grid; gap: 8px; }
+.tool-hero h3 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.035em; }
+.tool-hero p { color: var(--muted); font-size: 15px; }
+
+.prompt { background: var(--bg); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 14px 14px 12px 18px; display: grid; gap: 8px; }
+.prompt:focus-within { border-color: var(--green); }
+.prompt textarea { border: 0; outline: 0; resize: none; background: transparent; font-size: 17px; line-height: 1.5; min-height: 52px; width: 100%; color: var(--ink); }
+.prompt textarea::placeholder { color: var(--muted); }
+.prompt-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.prompt-hint { font-size: 12px; color: var(--muted); }
+.send { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--btn); color: var(--btn-ink); display: grid; place-items: center; flex: none; }
+.send svg { width: 18px; height: 18px; }
+.send:hover { opacity: 0.85; }
+
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 7px 14px; font-size: 14px; color: var(--body); }
+.chip:hover { border-color: var(--ink); color: var(--ink); }
+
+.answer { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 12px; }
+.answer-q { font-size: 13px; color: var(--muted); }
+.answer-body { display: grid; gap: 10px; color: var(--ink); font-size: 15px; }
+.answer-body ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.answer-body .sub { color: var(--muted); }
+.answer-src { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+.answer-src span { font-size: 12px; color: var(--muted); align-self: center; margin-right: 2px; }
+.src-link { border: 1px solid var(--line); background: var(--mist); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: var(--ink); }
+.src-link:hover { border-color: var(--green); color: var(--green); }
+.thinking { color: var(--muted); font-size: 14px; }
+
+.soon { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--muted); padding: 2px 4px; }
+.soon b { color: var(--ink); font-weight: 500; }
+
+.feed-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 8px; padding: 0 4px; }
+.feed-head h4 { font-size: 15px; }
+.feed-head span { font-size: 13px; color: var(--muted); }
+.feed { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+.item { border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: 0; }
+.item.flash { animation: flash 1.4s ease; }
+@keyframes flash { from { background: var(--green-surface); } to { background: transparent; } }
+.row { width: 100%; text-align: left; background: transparent; border: 0; padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
+.row:hover { background: var(--soft); }
+.row .meta { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.row .title { color: var(--ink); font-weight: 500; font-size: 16px; line-height: 1.35; grid-column: 1; }
+.row .why { color: var(--muted); font-size: 14px; grid-column: 1; }
+.row .side { grid-column: 2; grid-row: 1 / span 3; display: flex; align-items: center; gap: 10px; }
+.chev { width: 16px; height: 16px; color: var(--muted); transition: transform .2s ease; }
+.item.open .chev { transform: rotate(180deg); }
+.stage { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.stage.s0 { background: var(--amber-surface); color: var(--amber); }
+.stage.s1 { background: var(--indigo-surface); color: var(--indigo); }
+.stage.s2 { background: var(--green-surface); color: var(--green); }
+.more { padding: 0 18px 20px; display: grid; gap: 16px; }
+.more h5 { margin: 0 0 4px; font-size: 12px; font-family: var(--mono); font-weight: 400; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.more ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--ink); font-size: 15px; }
+.more p { color: var(--ink); font-size: 15px; }
+.opener { background: var(--green-surface); border-radius: var(--r-md); padding: 14px 16px; display: grid; gap: 10px; }
+.opener h5 { color: var(--green); }
+.opener-row { display: flex; justify-content: flex-end; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r-sm); padding: 8px 14px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.btn:hover { border-color: var(--ink); }
+.btn-dark { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.btn-dark:hover { opacity: 0.88; }
+.more-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.empty { padding: 28px 18px; text-align: center; color: var(--muted); font-size: 14px; }
+.tool-note { text-align: center; font-size: 12px; color: var(--muted); }
+
+/* Build */
+.build { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.build div { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+.build h3 { font-size: 16px; }
+.build p { margin-top: 6px; font-size: 14px; color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 40px; font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chev { transition: none; }
+  .item.flash { animation: none; }
 }
-.due:hover { border-color: var(--accent); }
-.due .cal { width: 50px; border: 1px solid var(--line); border-radius: var(--radius); text-align: center; overflow: hidden; }
-.due .cal .m { background: var(--heading); color: var(--surface); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 0; }
-.due .cal .d { font-size: 20px; font-weight: 900; color: var(--heading); padding: 2px 0 3px; }
-.due .t { font-size: 14px; font-weight: 700; color: var(--heading); min-width: 0; }
-.due .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.due .away { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--warn); background: var(--warn-soft); padding: 1px 6px; border-radius: var(--radius); }
-.strip-empty { font-size: 14px; color: var(--muted); padding: 12px 0; }
-
-/* Filters */
-.filters { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 5px 10px; font-size: 14px; }
-.chip[aria-pressed="true"] { background: var(--heading); color: var(--surface); border-color: var(--heading); font-weight: 700; }
-.selects { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
-.selects label { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-.selects select { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 8px; font-size: 14px; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--fg); }
-
-.result-line { margin-top: 18px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
-.result-line b { color: var(--heading); }
-
-/* List + detail */
-.workspace { margin-top: 10px; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: start; }
-@media (min-width: 1000px) { .workspace { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); } }
-.list { display: grid; gap: 10px; min-width: 0; }
-.card {
-  display: grid; gap: 8px; text-align: left; width: 100%; background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 14px 16px; min-width: 0;
-}
-.card:hover { border-color: var(--muted); }
-.card[aria-current="true"] { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
-.card-top { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
-.card-top .reg { font-weight: 700; color: var(--fg); }
-.card h3 { font-size: 17px; line-height: 1.3; }
-.card p { margin: 0; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.card-foot { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
-.tags { display: flex; flex-wrap: wrap; gap: 4px; }
-.tag { font-size: 12px; background: var(--surface-2); padding: 2px 7px; border-radius: var(--radius); }
-.flag { font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: var(--radius); white-space: nowrap; }
-.flag.review { color: var(--warn); background: var(--warn-soft); }
-.flag.ok { color: var(--accent-text); background: var(--accent-soft); }
-.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); padding: 24px; text-align: center; color: var(--muted); }
-
-/* Stage ladder (Proposed → Decided → In force) */
-.ladder { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-.ladder .bars { display: flex; gap: 3px; }
-.ladder .bars i { width: 22px; height: 6px; border-radius: 2px; background: var(--line); }
-.ladder .bars i.on { background: var(--accent); }
-.ladder b { color: var(--heading); }
-.ladder .guide { color: var(--info); background: var(--info-soft); padding: 1px 7px; border-radius: var(--radius); font-weight: 700; }
-
-.detail {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  min-width: 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px);
-  max-height: calc(100vh - 32px); overflow: auto;
-}
-.detail-inner { padding: 22px 24px 28px; display: grid; gap: 22px; }
-.btn.detail-close { display: none; }
-@media (max-width: 999px) {
-  .detail { display: none; }
-  body.sheet-open .detail {
-    display: block; position: fixed; inset: 0; top: env(safe-area-inset-top, 0px); max-height: none; z-index: 30;
-    border: 0; border-radius: 0; padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  body.sheet-open { overflow: hidden; }
-  .btn.detail-close { display: inline-flex; }
-  .detail-inner { padding: 16px 16px 32px; }
-}
-.detail-head { display: grid; gap: 8px; }
-.detail-head .meta { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 13px; color: var(--muted); }
-.detail-head h2 { font-size: 24px; line-height: 1.25; }
-.detail-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
-.btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius); padding: 9px 16px; font-weight: 700; font-size: 14px; text-decoration: none; border: 2px solid var(--accent); }
-.btn-primary { background: var(--accent); color: #FFFFFF; }
-.btn-primary:hover { opacity: 0.9; }
-.btn-secondary { background: transparent; color: var(--accent-text); }
-.btn-plain { background: transparent; border: 1px solid var(--line); color: var(--fg); padding: 8px 12px; }
-
-.dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.dates div { background: var(--surface); padding: 10px 12px; }
-.dates dt { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
-.dates dd { margin: 2px 0 0; font-size: 15px; font-weight: 700; color: var(--heading); }
-
-.timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-.timeline .step { position: relative; padding-top: 18px; padding-right: 8px; }
-.timeline .step::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--line); }
-.timeline .step.on::before { background: var(--accent); }
-.timeline .step::after { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line); }
-.timeline .step.on::after { background: var(--accent); border-color: var(--accent); }
-.timeline .step.current::after { box-shadow: 0 0 0 4px var(--accent-soft); }
-.timeline .step b { display: block; font-size: 14px; color: var(--heading); }
-.timeline .step span { font-size: 13px; color: var(--muted); }
-
-.block h4 { font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.block p { margin: 0; max-width: 65ch; }
-.block ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; max-width: 65ch; }
-.talk { background: var(--accent-soft); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 10px; }
-.talk h4 { color: var(--accent-text); margin: 0; }
-.talk p { color: var(--heading); }
-.talk .row { display: flex; justify-content: flex-end; gap: 8px; }
-.review-note { background: var(--warn-soft); color: var(--warn); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; }
-.cta-box { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 10px; }
-.cta-box p { margin: 0; }
-.cta-box .row { display: flex; justify-content: flex-end; }
-
-.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--line); }
-.log li { padding: 0 0 12px 14px; position: relative; font-size: 14px; }
-.log li::before { content: ""; position: absolute; left: -5px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
-.log li:first-child::before { background: var(--accent); }
-.log time { display: block; font-size: 12px; font-weight: 700; color: var(--muted); }
-.source-line { font-size: 13px; color: var(--muted); }
-.source-line a { word-break: break-word; }
-
-/* Website-view extras */
-.alerts { background: var(--bar); color: var(--bar-fg); border-radius: var(--radius); padding: 18px; display: grid; gap: 10px; }
-.alerts h3 { color: var(--bar-fg); font-size: 18px; }
-.alerts p { margin: 0; font-size: 14px; color: var(--bar-muted); }
-.alerts form { display: flex; flex-wrap: wrap; gap: 8px; }
-.alerts input { flex: 1 1 200px; min-width: 0; padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--bar-line); background: var(--bar-chip); color: var(--bar-fg); }
-.alerts .done { font-size: 14px; color: var(--accent); font-weight: 700; }
-
-/* Sources footer */
-.sources { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 20px; display: grid; gap: 10px; }
-.sources ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.sources li { font-size: 13px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 8px; }
-.sources li b { color: var(--accent-text); font-weight: 700; margin-right: 4px; }
-.fine { font-size: 12px; color: var(--muted); max-width: 80ch; }
-
-/* Ask */
-.ask { max-width: 820px; margin: 0 auto; display: grid; gap: 16px; }
-.ask-intro h2 { font-size: 24px; }
-.ask-intro p { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
-.suggest { display: flex; flex-wrap: wrap; gap: 8px; }
-.suggest button { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; font-size: 14px; text-align: left; }
-.suggest button:hover { border-color: var(--accent); }
-.thread { display: grid; gap: 12px; min-height: 120px; }
-.msg { max-width: 92%; border-radius: var(--radius); padding: 12px 14px; font-size: 15px; min-width: 0; }
-.msg p { margin: 0 0 8px; }
-.msg p:last-child { margin-bottom: 0; }
-.msg.user { justify-self: end; background: var(--heading); color: var(--surface); }
-.msg.bot { justify-self: start; background: var(--surface); border: 1px solid var(--line); }
-.msg.bot .who { font-size: 12px; font-weight: 700; color: var(--accent-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.msg.bot strong { color: var(--heading); }
-.cites { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
-.cite { font-size: 12px; background: var(--surface-2); border: 0; border-radius: var(--radius); padding: 4px 8px; color: var(--fg); }
-.cite:hover { background: var(--accent-soft); color: var(--accent-text); }
-.typing { color: var(--muted); font-size: 14px; }
-.composer { display: flex; gap: 8px; position: sticky; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); background: var(--bg); padding-top: 8px; }
-.composer input { flex: 1; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); font-size: 16px; }
-.composer input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-
-/* Modal (floating, so it may carry a shadow) */
-.modal-back { position: fixed; inset: 0; background: var(--scrim); display: grid; place-items: center; padding: 16px; z-index: 50; }
-.modal { background: var(--surface); border-radius: var(--radius); max-width: 560px; width: 100%; padding: 22px; display: grid; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
-.modal h2 { font-size: 20px; }
-.modal p { margin: 0; font-size: 14px; }
-.modal pre { margin: 0; background: var(--surface-2); padding: 12px; border-radius: var(--radius); font-family: var(--mono); font-size: 12.5px; white-space: pre-wrap; word-break: break-all; color: var(--heading); }
-.modal .row { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .card, .due, .chip, .btn { transition: border-color .15s ease, background-color .15s ease, opacity .15s ease; }
+@media (max-width: 600px) {
+  .intro { padding-block: 48px 40px; }
+  .step { padding-block: 48px; }
+  .tool { padding-block: 36px 28px; border-radius: var(--r-lg); }
+  .row { grid-template-columns: 1fr; }
+  .row .side { grid-column: 1; grid-row: auto; margin-top: 6px; }
+  .chev { display: none; }
 }
 </style>
 
-<header class="bar">
+<header class="nav">
   <div class="wrap">
-    <div class="brand">
+    <div class="nav-brand">
       <svg viewBox="0 0 268 151" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Legl">
-        <path d="M137.239 97.061C138.113 94.4298 134.62 90.483 132.291 91.7986C128.653 93.8451 116.719 100.131 106.968 100.131C97.0716 100.131 92.1234 96.9148 89.6493 94.2836C88.7761 93.2604 88.0485 92.091 87.3208 90.6292C86.7387 89.0213 86.302 87.2672 86.011 85.2207L140.15 85.2207C140.15 85.2207 140.441 80.6892 140.441 77.0348C140.441 54.6699 124.869 39.6137 102.311 39.6137C79.753 39.6137 61.27 54.0852 61.27 79.3736C61.27 83.1742 61.7066 86.8286 62.4343 90.0445C67.6736 106.562 83.1003 118.549 101.292 118.549C116.864 118.549 130.254 109.778 137.239 97.061ZM101.874 55.8393C112.207 55.8393 117.301 64.1713 117.447 71.1878L86.011 71.1878C86.4476 63.879 91.6868 55.8393 101.874 55.8393Z" fill="#FFFFFF"/>
-        <path d="M231.837 39.9061C231.837 39.029 231.109 38.2982 230.236 38.2982C221.795 38.2982 213.936 40.9293 207.533 45.607C207.096 45.8993 206.805 46.3378 206.805 46.9225L206.805 54.3775C202.73 49.2614 195.599 43.5605 183.083 43.5605C164.454 43.5605 147.136 56.5702 147.136 81.274C147.136 105.978 164.454 118.987 183.083 118.987C195.017 118.987 202.439 114.164 206.951 108.17L207.242 108.17L207.242 110.655C207.242 117.526 205.204 122.934 202.585 125.858C199.965 128.635 194.871 131.851 184.684 131.851C174.496 131.851 162.271 125.273 158.487 123.227C154.995 121.326 152.229 129.512 153.394 131.412C160.962 143.545 174.351 151 189.341 151C189.632 151 189.923 151 190.214 151C194.144 150.708 197.782 150.123 200.984 149.392C214.518 145.591 225.288 135.359 229.945 122.057C231.109 117.526 231.692 112.263 231.692 105.978L231.692 48.969L231.837 39.9061ZM190.214 99.9845C179.299 99.9845 172.313 91.9448 172.313 81.4201C172.313 71.0416 179.299 63.0019 190.214 63.0019C201.129 63.0019 207.969 71.0416 207.969 81.4201C207.969 91.9448 201.129 99.9845 190.214 99.9845Z" fill="#FFFFFF"/>
-        <path d="M265.747 6.4364e-08C256.724 4.1163e-08 248.428 2.77735 241.588 7.60116C241.151 7.89351 240.715 8.47822 240.715 8.91675L240.715 117.672C240.715 118.549 241.443 119.28 242.461 119.28C251.484 119.28 259.925 116.502 266.766 111.679C267.202 111.386 267.493 110.802 267.493 110.363L267.493 1.60794C267.493 0.730881 266.766 6.69834e-08 265.747 6.4364e-08Z" fill="#FFFFFF"/>
-        <path d="M55.7399 96.4763C55.5944 96.184 55.1578 96.0378 54.8667 96.0378L25.032 96.0378L25.032 95.8916L25.032 10.9632C25.032 10.2324 24.4499 9.50148 23.5767 9.64766C3.92945 9.79384 0 19.5876 0 19.5876L0.145535 19.5876L0 19.5876L0 110.363C0 113.871 2.9107 116.795 6.40354 116.795L60.397 116.649C61.1247 116.649 61.7068 116.064 61.7068 115.333C61.7068 108.317 59.5238 101.739 55.7399 96.4763Z" fill="#FFFFFF"/>
+        <path d="M137.239 97.061C138.113 94.4298 134.62 90.483 132.291 91.7986C128.653 93.8451 116.719 100.131 106.968 100.131C97.0716 100.131 92.1234 96.9148 89.6493 94.2836C88.7761 93.2604 88.0485 92.091 87.3208 90.6292C86.7387 89.0213 86.302 87.2672 86.011 85.2207L140.15 85.2207C140.15 85.2207 140.441 80.6892 140.441 77.0348C140.441 54.6699 124.869 39.6137 102.311 39.6137C79.753 39.6137 61.27 54.0852 61.27 79.3736C61.27 83.1742 61.7066 86.8286 62.4343 90.0445C67.6736 106.562 83.1003 118.549 101.292 118.549C116.864 118.549 130.254 109.778 137.239 97.061ZM101.874 55.8393C112.207 55.8393 117.301 64.1713 117.447 71.1878L86.011 71.1878C86.4476 63.879 91.6868 55.8393 101.874 55.8393Z" fill="currentColor"/>
+        <path d="M231.837 39.9061C231.837 39.029 231.109 38.2982 230.236 38.2982C221.795 38.2982 213.936 40.9293 207.533 45.607C207.096 45.8993 206.805 46.3378 206.805 46.9225L206.805 54.3775C202.73 49.2614 195.599 43.5605 183.083 43.5605C164.454 43.5605 147.136 56.5702 147.136 81.274C147.136 105.978 164.454 118.987 183.083 118.987C195.017 118.987 202.439 114.164 206.951 108.17L207.242 108.17L207.242 110.655C207.242 117.526 205.204 122.934 202.585 125.858C199.965 128.635 194.871 131.851 184.684 131.851C174.496 131.851 162.271 125.273 158.487 123.227C154.995 121.326 152.229 129.512 153.394 131.412C160.962 143.545 174.351 151 189.341 151C189.632 151 189.923 151 190.214 151C194.144 150.708 197.782 150.123 200.984 149.392C214.518 145.591 225.288 135.359 229.945 122.057C231.109 117.526 231.692 112.263 231.692 105.978L231.692 48.969L231.837 39.9061ZM190.214 99.9845C179.299 99.9845 172.313 91.9448 172.313 81.4201C172.313 71.0416 179.299 63.0019 190.214 63.0019C201.129 63.0019 207.969 71.0416 207.969 81.4201C207.969 91.9448 201.129 99.9845 190.214 99.9845Z" fill="currentColor"/>
+        <path d="M265.747 6.4364e-08C256.724 4.1163e-08 248.428 2.77735 241.588 7.60116C241.151 7.89351 240.715 8.47822 240.715 8.91675L240.715 117.672C240.715 118.549 241.443 119.28 242.461 119.28C251.484 119.28 259.925 116.502 266.766 111.679C267.202 111.386 267.493 110.802 267.493 110.363L267.493 1.60794C267.493 0.730881 266.766 6.69834e-08 265.747 6.4364e-08Z" fill="currentColor"/>
+        <path d="M55.7399 96.4763C55.5944 96.184 55.1578 96.0378 54.8667 96.0378L25.032 96.0378L25.032 95.8916L25.032 10.9632C25.032 10.2324 24.4499 9.50148 23.5767 9.64766C3.92945 9.79384 0 19.5876 0 19.5876L0.145535 19.5876L0 19.5876L0 110.363C0 113.871 2.9107 116.795 6.40354 116.795L60.397 116.649C61.1247 116.649 61.7068 116.064 61.7068 115.333C61.7068 108.317 59.5238 101.739 55.7399 96.4763Z" fill="currentColor"/>
       </svg>
-      <span class="divider" aria-hidden="true"></span>
-      <span class="name">Regulation tracker</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span>Regulation tracker</span>
     </div>
-    <div class="bar-controls">
-      <div class="seg" role="group" aria-label="Jurisdiction">
-        <button type="button" id="j-uk" aria-pressed="true" data-j="uk">UK</button>
-        <button type="button" id="j-au" aria-pressed="false" data-j="au">Australia</button>
-      </div>
-      <span class="seg-label">Preview as</span>
-      <div class="seg" role="group" aria-label="Preview as">
-        <button type="button" id="v-rep" aria-pressed="true" data-v="rep">Rep</button>
-        <button type="button" id="v-web" aria-pressed="false" data-v="web">Website</button>
-      </div>
-      <button type="button" class="bar-btn" id="embed-btn">Embed</button>
-    </div>
+    <span class="nav-tag">Concept, Oct 2026</span>
   </div>
 </header>
 
-<div class="notice">
-  <div class="wrap">
-    <span><strong>Design mockup.</strong> Records are real changes, summarised for review. Check the official source before using any of it with a prospect.</span>
-    <span class="tnum">Sources last checked 30 Sep 2026</span>
-  </div>
-</div>
-
-<nav class="tabs" aria-label="Sections">
-  <div class="wrap" role="tablist">
-    <button type="button" class="tab" role="tab" id="tab-browse" aria-selected="true" aria-controls="panel-browse">Browse changes</button>
-    <button type="button" class="tab" role="tab" id="tab-ask" aria-selected="false" aria-controls="panel-ask">Ask</button>
-  </div>
-</nav>
-
 <main>
-  <section class="wrap" id="panel-browse" role="tabpanel" aria-labelledby="tab-browse">
-    <div class="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" id="q" placeholder="Search changes, e.g. client money, enrolment, COFA" autocomplete="off" aria-label="Search changes">
-    </div>
-
-    <div class="upcoming">
-      <div class="upcoming-head">
-        <span class="section-label">Coming up in the next 12 months</span>
-        <span id="upcoming-note"></span>
-      </div>
-      <div class="strip" id="strip"></div>
-    </div>
-
-    <div class="filters">
-      <div class="chips" id="topics" role="group" aria-label="Topic"></div>
-      <div class="selects">
-        <label for="f-stage">Stage
-          <select id="f-stage">
-            <option value="all">All stages</option>
-            <option value="0">Proposed</option>
-            <option value="1">Decided</option>
-            <option value="2">In force</option>
-            <option value="g">Guidance</option>
-          </select>
-        </label>
-        <label for="f-reg">Regulator
-          <select id="f-reg"></select>
-        </label>
-        <label for="f-sort">Sort
-          <select id="f-sort">
-            <option value="new">Newest first</option>
-            <option value="eff">Takes effect soonest</option>
-          </select>
-        </label>
-      </div>
-    </div>
-
-    <div class="result-line tnum" id="result-line"></div>
-
-    <div class="workspace">
-      <div class="list" id="list"></div>
-      <aside class="detail" id="detail" aria-live="polite"></aside>
-    </div>
-
-    <div class="sources">
-      <span class="section-label" id="sources-label">Sources watched</span>
-      <ul id="sources"></ul>
-      <p class="fine">This tracker summarises public information from regulators and government. It is not legal advice. Each record links to its official source, and a person at Legl reviews it before it is marked verified.</p>
+  <section class="wrap intro">
+    <p class="eyebrow">From first principles</p>
+    <h1>One place to see what changed in legal regulation</h1>
+    <p class="lede">For UK and Australian law firms. Reps use it to start better conversations. It only works if the information is right, so we start with where it comes from.</p>
+    <div class="needs">
+      <div class="need"><h3>What changed</h3><p>In plain English, readable in 10 seconds.</p></div>
+      <div class="need"><h3>Who it affects</h3><p>Which firms, so reps know who to contact.</p></div>
+      <div class="need"><h3>Why it matters</h3><p>A ready opener for the call or email.</p></div>
+      <div class="need"><h3>Proof</h3><p>The official source and the dates, every time.</p></div>
     </div>
   </section>
 
-  <section class="wrap" id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" hidden>
-    <div class="ask">
-      <div class="ask-intro">
-        <h2 id="ask-title">Ask about UK changes</h2>
-        <p>Answers come only from the changes in this tracker, and every answer links the records it used. In this mockup the answers are prepared in advance.</p>
+  <section class="step">
+    <div class="wrap">
+      <div class="step-head">
+        <span class="step-num">1 / 4</span>
+        <h2>Where it comes from</h2>
+        <p>Only official sources: regulators, government and the published law. No news sites, no paid databases.</p>
       </div>
-      <div class="suggest" id="suggest"></div>
-      <div class="thread" id="thread" aria-live="polite"></div>
-      <form class="composer" id="composer">
-        <input type="text" id="ask-input" placeholder="Ask a question about regulatory changes" autocomplete="off" aria-label="Your question">
-        <button type="submit" class="btn btn-primary">Ask</button>
-      </form>
+      <div class="sources">
+        <div class="src-col">
+          <h3>United Kingdom <span>12 sources</span></h3>
+          <ul>
+            <li><b>SRA</b><small>Rules, consultations, decisions, warning notices</small><span class="how">Page check</span></li>
+            <li><b>Legal Services Board</b><small>Approvals that turn into SRA and CLC rules</small><span class="how">Page check</span></li>
+            <li><b>HM Treasury</b><small>Money Laundering Regulations and AML policy</small><span class="how feed">Feed</span></li>
+            <li><b>FCA and OPBAS</b><small>AML supervision, which is moving to the FCA</small><span class="how">Page check</span></li>
+            <li><b>Companies House</b><small>Identity verification and register changes</small><span class="how feed">Feed</span></li>
+            <li><b>OFSI</b><small>Financial sanctions</small><span class="how feed">Feed</span></li>
+            <li><b>ICO</b><small>Data protection</small><span class="how">Page check</span></li>
+            <li><b>legislation.gov.uk</b><small>The law itself, as passed</small><span class="how api">API</span></li>
+          </ul>
+          <p class="more">Also: Law Society of Scotland, Law Society of Northern Ireland, CLC, CILEx Regulation.</p>
+        </div>
+        <div class="src-col">
+          <h3>Australia <span>12 sources</span></h3>
+          <ul>
+            <li><b>AUSTRAC</b><small>AML/CTF rules and Tranche 2 guidance for lawyers</small><span class="how">Page check</span></li>
+            <li><b>Federal Register of Legislation</b><small>Federal laws and rules, as made</small><span class="how api">API</span></li>
+            <li><b>OAIC</b><small>Privacy Act changes and guidance</small><span class="how">Page check</span></li>
+            <li><b>Legal Services Council</b><small>Uniform Law rules for NSW, Victoria and WA</small><span class="how">Page check</span></li>
+            <li><b>Law Society of NSW and OLSC</b><small>NSW practice rules and guidance</small><span class="how">Page check</span></li>
+            <li><b>VLSB+C</b><small>Victorian regulator updates</small><span class="how">Page check</span></li>
+            <li><b>Queensland Law Society and LSC</b><small>Queensland rules and guidance</small><span class="how">Page check</span></li>
+            <li><b>Home Affairs</b><small>Cyber security duties for businesses</small><span class="how">Page check</span></li>
+          </ul>
+          <p class="more">Also: the law societies of South Australia, Tasmania, the ACT and the Northern Territory.</p>
+        </div>
+      </div>
+      <div class="aside-note">
+        <p><b>Feed</b> and <b>API</b> sources tell us when something new is published. <b>Page check</b> means we look at the regulator's news and consultation pages for anything new.</p>
+        <p><b>Your SRA API</b> gives firm data (who's regulated, firm type, offices), not rule changes. It isn't needed to track changes. Later, it can match each change to the firms it affects.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="wrap">
+      <div class="step-head">
+        <span class="step-num">2 / 4</span>
+        <h2>How it's gathered</h2>
+        <p>Every morning, automatically. A person approves each change before anyone sees it.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-step"><span class="n">Step 1</span><h3>Check</h3><p>A small script visits every source on the list.</p></div>
+        <div class="flow-step"><span class="n">Step 2</span><h3>Compare</h3><p>It keeps only what's new or different since yesterday.</p></div>
+        <div class="flow-step"><span class="n">Step 3</span><h3>Summarise</h3><p>AI reads the page and drafts the entry: what changed, who it affects, why it matters, key dates.</p></div>
+        <div class="flow-step human"><span class="n">Step 4</span><h3>Approve</h3><p>Someone at Legl checks the draft against the source and publishes it.</p></div>
+      </div>
+      <p class="flow-foot"><b>Why the human step:</b> reps will quote this to law firms about their own regulator. One wrong date costs more than the review takes.</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="wrap">
+      <div class="step-head">
+        <span class="step-num">3 / 4</span>
+        <h2>How it's stored</h2>
+        <p>Each change is one record in a simple database. Here is a real one.</p>
+      </div>
+      <div class="store">
+        <div class="rules">
+          <div><h3>One record per change</h3><p>A consultation and the final rule it becomes are the same record, not two.</p></div>
+          <div><h3>Updated, never overwritten</h3><p>When the regulator moves it forward, the stage changes and the history keeps every step with its date.</p></div>
+          <div><h3>Always dated</h3><p>When the regulator published it, when it takes effect, and when we last checked the source.</p></div>
+          <div><h3>One source of truth</h3><p>Search and chat both read these records, so an answer always matches what's on the page.</p></div>
+        </div>
+        <div class="record">
+          <div class="record-top"><span>Record</span><span class="mono">uk-sra-client-money</span></div>
+          <dl>
+            <dt>Title</dt><dd>Client money reforms confirmed</dd>
+            <dt>Country</dt><dd>UK</dd>
+            <dt>Regulator</dt><dd>SRA</dd>
+            <dt>Stage</dt><dd><span class="stage s1">Decided</span></dd>
+            <dt>Published</dt><dd class="mono">2 Jun 2026</dd>
+            <dt>Takes effect</dt><dd class="mono">Early 2027</dd>
+            <dt>Last checked</dt><dd class="mono">15 Oct 2026</dd>
+            <dt>What changed</dt><dd>Every firm holding client money files an accountants' report each year. Larger firms must split the COLP and COFA roles.</dd>
+            <dt>Who it affects</dt><dd>All SRA-regulated firms that hold client money</dd>
+            <dt>Why it matters</dt><dd>Annual reporting puts every client account under review from 2027.</dd>
+            <dt>Source</dt><dd><a href="https://www.sra.org.uk/news/news/press/safeguards-protect-client-money" target="_blank" rel="noopener">sra.org.uk</a></dd>
+            <dt>History</dt><dd class="hist mono"><span>2 Jun 2026 · moved to Decided</span><span>20 Feb 2026 · consultation closed</span><span>Nov 2024 · first consultation</span></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="wrap">
+      <div class="step-head">
+        <span class="step-num">4 / 4</span>
+        <h2>How it's shown</h2>
+        <p>One box to search or ask, and a list of changes underneath. Both countries in one place. Try it.</p>
+      </div>
+
+      <div class="tool">
+        <div class="tool-inner">
+          <div class="tool-hero">
+            <h3>What's changed in legal regulation?</h3>
+            <p>UK and Australia. Checked every morning.</p>
+          </div>
+
+          <form class="prompt" id="prompt">
+            <textarea id="q" rows="2" placeholder="Search or ask, e.g. what's changing for client money?" aria-label="Search or ask a question"></textarea>
+            <div class="prompt-row">
+              <span class="prompt-hint">Type to search. Press Enter to ask.</span>
+              <button type="submit" class="send" aria-label="Ask">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+              </button>
+            </div>
+          </form>
+
+          <div class="chips" id="chips"></div>
+
+          <div id="answer" hidden></div>
+
+          <div class="soon" id="soon"></div>
+
+          <div class="feed-head"><h4 id="feed-title">Latest changes</h4><span id="feed-count"></span></div>
+          <div class="feed" id="feed"></div>
+
+          <p class="tool-note">Concept: answers here are written in advance. The real tool answers from the records live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="wrap">
+      <div class="step-head">
+        <span class="step-num">To build it</span>
+        <h2>Three parts</h2>
+      </div>
+      <div class="build">
+        <div><h3>The page</h3><p>What you see in step 4. Built once, then embedded anywhere: Notion, HubSpot or the website.</p></div>
+        <div><h3>The records</h3><p>A database that holds every change and powers search and chat.</p></div>
+        <div><h3>The morning check</h3><p>The script that watches sources and drafts entries with AI, plus a simple approve screen.</p></div>
+      </div>
     </div>
   </section>
 </main>
 
-<div class="modal-back" id="embed-modal" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="embed-title">
-    <h2 id="embed-title">Embed this tracker</h2>
-    <p>Paste one line into Notion, HubSpot, an intranet page or the website. The region and view are set in the link.</p>
-    <pre id="embed-code"></pre>
-    <p class="fine">Example link. The real address comes when the tracker is built.</p>
-    <div class="row">
-      <button type="button" class="btn btn-plain" id="embed-close">Close</button>
-      <button type="button" class="btn btn-primary" id="embed-copy">Copy code</button>
-    </div>
-  </div>
-</div>
+<footer>
+  <div class="wrap">Not legal advice. Every entry links to its official source.</div>
+</footer>
 
 <script>
 (function () {
-  var TODAY = '2026-09-30';
+  var TODAY = '2026-10-15';
   var STAGES = ['Proposed', 'Decided', 'In force'];
-
-  var RECORDS = [
-    {
-      id: 'uk-client-money', j: 'uk', regulator: 'SRA',
-      title: 'Client money reforms confirmed: annual accountants’ reports and a COLP/COFA split',
-      summary: 'Every firm holding client money will file an accountants’ report with the SRA each year, qualified or not. Larger firms must separate the COLP and COFA roles from the person who runs the firm.',
-      changes: [
-        'Annual accountants’ report plus a firm declaration for every firm that holds client money.',
-        'Firms with turnover above £600,000, or more than £2m client money, cannot have a sole decision-maker also acting as COLP or COFA. Smaller sole owner-managers may keep the COLP role only.',
-        'The client money threshold moved from the proposed £500,000 to £2m after consultation.',
-        'Fixed penalties for late or missing reports apply from April 2027.'
-      ],
-      affected: 'All SRA-regulated firms that hold client money. The COLP/COFA split applies to firms over £600,000 turnover or £2m client money.',
-      talk: 'From 2027 every firm holding client money files an accountants’ report every year. How much client money does your firm hold today, and how clean are your reconciliations?',
-      topics: ['Client money', 'Governance'], stage: 1,
-      steps: ['Nov 2024', '2 Jun 2026', 'Early 2027'],
-      published: '2026-06-02', firstSeen: '2026-06-02', effective: '2027-01-01', effectiveLabel: 'Early 2027',
-      verified: true,
-      source: { label: 'SRA press release', url: 'https://www.sra.org.uk/news/news/press/safeguards-protect-client-money' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2026-06-02', 'Stage moved to Decided. Client money threshold changed from £500,000 to £2m.'],
-        ['2026-02-20', 'Second consultation closed.'],
-        ['2024-11-01', 'Added when the SRA published its first client money consultation.']
-      ]
-    },
-    {
-      id: 'uk-fca-supervisor', j: 'uk', regulator: 'HM Treasury',
-      title: 'FCA to become the single AML supervisor for professional services',
-      summary: 'The government confirmed the FCA will take over AML supervision of law firms from the SRA and the other professional body supervisors. New legislation is needed first.',
-      changes: [
-        'The 22 professional body AML supervisors, including the SRA, will stop supervising AML.',
-        'The FCA will supervise legal, accountancy, and trust and company service providers for AML.',
-        'Timing depends on legislation, funding and a transition plan. Expected by 2029.'
-      ],
-      affected: 'Every firm currently supervised for AML by the SRA, CLC, CILEx Regulation, the Law Society of Scotland or the Law Society of Northern Ireland.',
-      talk: 'Your AML supervisor is changing to the FCA. It’s a good moment to check that your client due diligence and firm-wide risk assessment leave a clear audit trail.',
-      topics: ['AML'], stage: 1,
-      steps: ['Jun 2023', '21 Oct 2025', 'By 2029'],
-      published: '2025-10-21', firstSeen: '2025-10-21', effective: '2029-01-01', effectiveLabel: 'By 2029 (expected)',
-      verified: true,
-      source: { label: 'SRA update on the AML supervision change', url: 'https://www.sra.org.uk/news/news/sra-update-145-aml-supervision-change/' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2025-10-21', 'Stage moved to Decided. Government consultation response published.'],
-        ['2023-06-30', 'Added when HM Treasury consulted on reforming AML supervision.']
-      ]
-    },
-    {
-      id: 'uk-litigation-funding', j: 'uk', regulator: 'SRA',
-      title: 'Consultation: third-party litigation funding in consumer claims',
-      summary: 'The SRA proposes stronger requirements for solicitors who use or arrange third-party litigation funding in consumer claims. The 10-week consultation has now closed.',
-      changes: [
-        'Stronger requirements on solicitors using or arranging third-party funding in consumer claims.',
-        'Part of the SRA’s wider consumer protection review.'
-      ],
-      affected: 'Firms running consumer claims that use or arrange third-party litigation funding.',
-      talk: 'If you run consumer claims with third-party funding, the SRA plans tighter rules. How do you explain funding arrangements to clients at the start of a matter?',
-      topics: ['Consumer claims'], stage: 0,
-      steps: ['9 Jul 2026', '', ''],
-      published: '2026-07-09', firstSeen: '2026-07-10', effective: null, effectiveLabel: 'Not set yet',
-      verified: true,
-      source: { label: 'SRA consumer protection review', url: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/' },
-      log: [
-        ['2026-09-30', 'Consultation period ended. Waiting for the SRA’s response.'],
-        ['2026-07-10', 'Added when the consultation opened.']
-      ]
-    },
-    {
-      id: 'uk-complaints', j: 'uk', regulator: 'SRA',
-      title: 'Consultation: keeping clients informed about how to complain',
-      summary: 'New rules proposed so clients are told, and kept up to date, about how to make a complaint to their law firm.',
-      changes: [
-        'Additional rules on the complaints information firms give clients.',
-        'Aims to make sure clients know how to complain if they need to.'
-      ],
-      affected: 'All SRA-regulated firms.',
-      talk: 'The SRA is tightening what firms tell clients about complaints. Firms with one consistent onboarding flow can show that information to every client at the start.',
-      topics: ['Complaints'], stage: 0,
-      steps: ['3 Jul 2026', '', ''],
-      published: '2026-07-03', firstSeen: '2026-07-03', effective: null, effectiveLabel: 'Not set yet',
-      verified: true,
-      source: { label: 'SRA consultation announcement', url: 'https://www.sra.org.uk/news/news/releases/first-tier-complaints-consultation-2026' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2026-07-03', 'Added when the consultation opened.']
-      ]
-    },
-    {
-      id: 'uk-notifications', j: 'uk', regulator: 'SRA',
-      title: 'Consultation: telling the SRA about mergers, acquisitions and holding client money',
-      summary: 'The SRA wants earlier notice when firms plan a merger or acquisition, or start holding client money, so it can spot risk sooner.',
-      changes: [
-        'New notification duties for planned mergers and acquisitions.',
-        'Firms would notify the SRA when they start holding client money.',
-        'Part of a move towards intelligence-led supervision.'
-      ],
-      affected: 'All SRA-regulated firms, especially those planning a merger or acquisition.',
-      talk: 'The SRA is moving to earlier, intelligence-led supervision. If you’re planning a merger, expect to tell the SRA before it happens.',
-      topics: ['Governance', 'Client money'], stage: 0,
-      steps: ['19 Jun 2026', '', ''],
-      published: '2026-06-19', firstSeen: '2026-06-19', effective: null, effectiveLabel: 'Not set yet',
-      verified: true,
-      source: { label: 'SRA consumer protection review', url: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2026-06-19', 'Added when the consultation opened.']
-      ]
-    },
-    {
-      id: 'uk-ch-idv', j: 'uk', regulator: 'Companies House',
-      title: 'Identity verification now required for directors and PSCs',
-      summary: 'Since 18 November 2025, new directors and people with significant control must verify their identity. Existing ones have a 12-month transition, tied to the company’s next confirmation statement.',
-      changes: [
-        'New directors must verify before they can act.',
-        'Existing directors and PSCs verify within the transition period.',
-        'Applies to LLP members and to directors of overseas companies with a UK establishment.',
-        'Failing to verify is an offence.'
-      ],
-      affected: 'Firms’ corporate clients, firms structured as LLPs or companies, and firms that file at Companies House for clients.',
-      talk: 'Directors and PSCs now need verified identities at Companies House. Corporate teams are fielding client questions, and their own ID checks should match what’s on the register.',
-      topics: ['KYC and ID'], stage: 2,
-      steps: ['ECCTA 2023', 'Date set 2025', '18 Nov 2025'],
-      published: '2025-11-18', firstSeen: '2025-11-18', effective: '2025-11-18', effectiveLabel: '18 Nov 2025',
-      verified: true,
-      source: { label: 'GOV.UK: verifying your identity for Companies House', url: 'https://www.gov.uk/guidance/verifying-your-identity-for-companies-house' },
-      log: [
-        ['2026-09-30', 'Source re-checked. Transition period ends in November 2026.'],
-        ['2025-11-18', 'Stage moved to In force.']
-      ]
-    },
-    {
-      id: 'uk-fraud', j: 'uk', regulator: 'Home Office',
-      title: 'Failure to prevent fraud offence in force',
-      summary: 'Large organisations can be prosecuted if someone working for them commits fraud intended to benefit the organisation. The defence is having reasonable fraud prevention procedures.',
-      changes: [
-        'New corporate offence under the Economic Crime and Corporate Transparency Act 2023.',
-        'Applies to large organisations meeting two of: over 250 staff, over £36m turnover, over £18m total assets.',
-        'Home Office guidance explains what reasonable procedures look like.'
-      ],
-      affected: 'Larger law firms and many of their corporate clients.',
-      talk: 'Large firms can now be prosecuted when someone working for them commits fraud to benefit the firm. Reasonable prevention procedures are the defence. When did yours last get a review?',
-      topics: ['Fraud'], stage: 2,
-      steps: ['Oct 2023', '6 Nov 2024', '1 Sep 2025'],
-      published: '2025-09-01', firstSeen: '2025-09-01', effective: '2025-09-01', effectiveLabel: '1 Sep 2025',
-      verified: true,
-      source: { label: 'GOV.UK: failure to prevent fraud guidance', url: 'https://www.gov.uk/government/publications/offence-of-failure-to-prevent-fraud-introduced-by-eccta' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2025-09-01', 'Stage moved to In force.'],
-        ['2024-11-06', 'Stage moved to Decided. Guidance published and start date set.']
-      ]
-    },
-    {
-      id: 'uk-mlr', j: 'uk', regulator: 'HM Treasury',
-      title: 'Money Laundering Regulations amendments: EDD and high-risk countries',
-      summary: 'Draft changes would require enhanced due diligence only for unusually complex or unusually large transactions, and narrow country-based EDD to the FATF call-for-action list.',
-      changes: [
-        'EDD applies to transactions that are unusually complex or unusually large, not routine ones.',
-        'Country-related EDD narrowed to countries on the FATF call-for-action list.',
-        'Draft published 2 September 2025. Final instrument expected in 2026.'
-      ],
-      affected: 'Every firm in scope of the Money Laundering Regulations.',
-      talk: 'The MLR changes aim to make EDD more proportionate. Firms can stop over-applying it, but only if their risk assessment explains why.',
-      topics: ['AML'], stage: 0,
-      steps: ['2 Sep 2025', '', ''],
-      published: '2025-09-02', firstSeen: '2025-09-03', effective: null, effectiveLabel: 'To confirm',
-      verified: false, reviewNote: 'Needs review: the source is a law firm summary, not the official instrument. Confirm whether the final regulations have been made and add the legislation.gov.uk link.',
-      source: { label: 'Secondary source: Reed Smith summary', url: 'https://www.reedsmith.com/en/perspectives/2025/09/hm-treasury-publishes-statutory-instrument-amending-anti-money-laundering' },
-      log: [
-        ['2026-09-30', 'Flagged for review. Official status in 2026 not yet confirmed.'],
-        ['2025-09-03', 'Added when the draft statutory instrument was published.']
-      ]
-    },
-
-    {
-      id: 'au-tranche2', j: 'au', regulator: 'AUSTRAC',
-      title: 'Lawyers and conveyancers now regulated under AML/CTF (Tranche 2)',
-      summary: 'Since 1 July 2026, lawyers and conveyancers who provide designated services are AML/CTF reporting entities. They must enrol with AUSTRAC within 28 days of first providing one.',
-      changes: [
-        'Designated services include real estate deals, forming or managing companies and trusts, and handling client money or assets.',
-        'Firms must enrol, run an AML/CTF program, carry out customer due diligence and screening, report suspicious matters and keep records for 7 years.',
-        'Enrolment opened 31 March 2026. For services provided from 1 July, the deadline was 29 July 2026.'
-      ],
-      affected: 'Law practices and conveyancers providing designated services, such as property transactions, setting up companies or trusts, and managing client funds.',
-      talk: 'AML/CTF obligations started for law firms on 1 July. How is your team handling customer due diligence on new property and trust matters?',
-      topics: ['AML', 'KYC and ID'], stage: 2,
-      steps: ['Act passed 10 Dec 2024', 'Rules made 29 Aug 2025', '1 Jul 2026'],
-      published: '2026-07-01', firstSeen: '2024-12-10', effective: '2026-07-01', effectiveLabel: '1 Jul 2026',
-      verified: true,
-      source: { label: 'AUSTRAC factsheet for Tranche 2 entities (PDF)', url: 'https://www.austrac.gov.au/sites/default/files/2025-07/AMLCTF_obligations_factsheet_for_tranche_2_REs.pdf' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2026-07-01', 'Stage moved to In force.'],
-        ['2026-03-31', 'AUSTRAC enrolment opened.'],
-        ['2025-08-29', 'AML/CTF Rules 2025 made.'],
-        ['2024-12-10', 'Added when the AML/CTF Amendment Act received Royal Assent.']
-      ]
-    },
-    {
-      id: 'au-rules', j: 'au', regulator: 'AUSTRAC',
-      title: 'AML/CTF Rules 2025 finalised',
-      summary: 'AUSTRAC’s final Rules set out the detail reporting entities follow: what goes in an AML/CTF program, how to do customer due diligence and what to report.',
-      changes: [
-        'Replaces the previous AML/CTF Rules.',
-        'Sets the detail behind the 2024 amendments to the AML/CTF Act.',
-        'AUSTRAC is publishing sector guidance alongside the Rules.'
-      ],
-      affected: 'All AML/CTF reporting entities, including law practices that provide designated services.',
-      talk: 'The final AUSTRAC Rules spell out what a law firm’s AML/CTF program must contain. Has your firm mapped its onboarding steps against them?',
-      topics: ['AML'], stage: 2,
-      steps: ['Exposure drafts 2025', '29 Aug 2025', '2026'],
-      published: '2025-08-29', firstSeen: '2025-08-29', effective: '2026-03-31', effectiveLabel: '31 Mar 2026',
-      verified: true,
-      source: { label: 'AUSTRAC: Rules release and guidance', url: 'https://www.austrac.gov.au/amlctf-rules-release-and-upcoming-guidance' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2025-08-29', 'Stage moved to Decided. Rules made and tabled.']
-      ]
-    },
-    {
-      id: 'au-adm', j: 'au', regulator: 'OAIC',
-      title: 'Privacy policies must explain automated decisions from 10 December 2026',
-      summary: 'Organisations covered by the Privacy Act must say in their privacy policy when computer programs make, or substantially help make, decisions that significantly affect people.',
-      changes: [
-        'Privacy policies must describe the kinds of personal information used and the kinds of decisions made by automated means.',
-        'Applies where a decision could reasonably be expected to significantly affect someone’s rights or interests.',
-        'The OAIC consulted on draft guidance. Final guidance is expected before the start date.'
-      ],
-      affected: 'Organisations covered by the Privacy Act, generally those with turnover above $3m, that use automated decision-making.',
-      talk: 'From 10 December, privacy policies must explain automated decisions that significantly affect people. Firms using automated onboarding or risk checks should look at what their policy says.',
-      topics: ['Privacy'], stage: 1,
-      steps: ['2024 bill', '10 Dec 2024', '10 Dec 2026'],
-      published: '2024-12-10', firstSeen: '2024-12-10', effective: '2026-12-10', effectiveLabel: '10 Dec 2026',
-      verified: true,
-      source: { label: 'OAIC consultation on ADM guidance', url: 'https://www.oaic.gov.au/engage-with-us/consultations/consultation-on-guidance-for-transparency-in-automated-decision-making' },
-      log: [
-        ['2026-09-30', 'Source re-checked. Final OAIC guidance not yet recorded.'],
-        ['2024-12-10', 'Added when the Privacy and Other Legislation Amendment Act 2024 received Royal Assent.']
-      ]
-    },
-    {
-      id: 'au-ransomware', j: 'au', regulator: 'Home Affairs',
-      title: 'Ransomware payments must be reported within 72 hours',
-      summary: 'Businesses with turnover above $3m must report any ransomware or cyber extortion payment to the Australian Signals Directorate’s ACSC within 72 hours.',
-      changes: [
-        'Mandatory reporting under the Cyber Security Act 2024.',
-        'Report within 72 hours of making, or becoming aware of, a payment.',
-        'The report covers the incident, the demand and the amount paid.'
-      ],
-      affected: 'Businesses with annual turnover above $3m, including many law practices.',
-      talk: 'Law firms are a common ransomware target. Larger firms that pay a ransom must now report it within 72 hours. Is that in your incident plan?',
-      topics: ['Cyber'], stage: 2,
-      steps: ['Oct 2024', '29 Nov 2024', '30 May 2025'],
-      published: '2025-05-30', firstSeen: '2025-05-30', effective: '2025-05-30', effectiveLabel: '30 May 2025',
-      verified: true,
-      source: { label: 'Home Affairs factsheet (PDF)', url: 'https://www.homeaffairs.gov.au/cyber-security-subsite/files/factsheet-ransomware-payment-reporting.pdf' },
-      log: [
-        ['2026-09-30', 'Source re-checked. No change.'],
-        ['2025-05-30', 'Stage moved to In force.']
-      ]
-    },
-    {
-      id: 'au-vic-risk', j: 'au', regulator: 'VLSB+C (Victoria)',
-      title: 'Risk Outlook 2026: trust accounting, cyber, costs disclosure and supervision',
-      summary: 'Victoria’s legal regulator names four risk areas for law practices in 2026, with reminders on trust account rules and reporting irregularities.',
-      changes: [
-        'Four risk areas: trust accounting, cyber security, costs disclosure and supervision.',
-        'Principals cannot delegate trust account responsibilities to bookkeepers or practice managers.',
-        'Reminder to report actual or suspected trust account irregularities as soon as possible.'
-      ],
-      affected: 'Victorian law practices, especially those holding trust money.',
-      talk: 'Victoria’s regulator lists trust accounting and cyber security among its top risks for 2026. Who in your practice owns trust account reconciliation?',
-      topics: ['Client money', 'Cyber'], stage: 'g',
-      steps: null,
-      published: '2026-01-01', publishedLabel: '2026', firstSeen: '2026-09-29', effective: null, effectiveLabel: 'Guidance only',
-      verified: false, reviewNote: 'Needs review: confirm the publish date and check the summary against the full report.',
-      source: { label: 'VLSB+C Risk Outlook 2026', url: 'https://lsbc.vic.gov.au/lawyers/risk-outlook/risk-outlook-2026' },
-      log: [
-        ['2026-09-29', 'Added. Waiting for review.']
-      ]
-    }
-  ];
-
-  var UPCOMING = [
-    { j: 'uk', date: '2026-11-18', approx: true, id: 'uk-ch-idv', text: 'Companies House transition for existing directors and PSCs ends', who: 'Companies House' },
-    { j: 'uk', date: '2027-01-01', approx: true, label: 'Early 2027', id: 'uk-client-money', text: 'Annual accountants’ reports and COLP/COFA split start', who: 'SRA' },
-    { j: 'uk', date: '2027-04-01', approx: true, label: 'Apr 2027', id: 'uk-client-money', text: 'Fixed penalties for late accountants’ reports start', who: 'SRA' },
-    { j: 'au', date: '2026-12-10', id: 'au-adm', text: 'Automated decision-making must be explained in privacy policies', who: 'OAIC' }
-  ];
-
-  var SOURCES = {
-    uk: ['SRA', 'Legal Services Board', 'HM Treasury', 'FCA', 'OPBAS', 'Companies House', 'Home Office', 'OFSI', 'ICO', 'Law Society of Scotland', 'Law Society of NI', 'CLC', 'CILEx Regulation', 'Legal Ombudsman', 'legislation.gov.uk'],
-    au: ['AUSTRAC', 'OAIC', 'Home Affairs', 'Legal Services Council', 'Law Society of NSW', 'OLSC (NSW)', 'VLSB+C (Victoria)', 'LPBWA (WA)', 'Queensland Law Society', 'Legal Services Commission (Qld)', 'Law Society of SA', 'Federal Register of Legislation']
-  };
-
-  var SUGGEST = {
-    uk: [
-      { q: 'What’s changing for client money?', ids: ['uk-client-money', 'uk-notifications'] },
-      { q: 'Who will supervise AML for law firms?', ids: ['uk-fca-supervisor'] },
-      { q: 'What’s coming up in the next 12 months?', intent: 'upcoming' },
-      { q: 'What’s still at proposal stage?', intent: 'proposed' }
-    ],
-    au: [
-      { q: 'What do law firms need to do under Tranche 2?', ids: ['au-tranche2', 'au-rules'] },
-      { q: 'When do the automated decision rules start?', ids: ['au-adm'] },
-      { q: 'What’s coming up in the next 12 months?', intent: 'upcoming' },
-      { q: 'Which changes affect trust accounting?', ids: ['au-vic-risk', 'au-tranche2'] }
-    ]
-  };
-
-  var state = { j: 'uk', view: 'rep', tab: 'browse', q: '', topic: 'All', stage: 'all', reg: 'all', sort: 'new', selected: null };
-  var threads = { uk: [], au: [] };
-
-  var $ = function (id) { return document.getElementById(id); };
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-  function parse(iso) { var p = iso.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
-  function fmt(iso) { var d = parse(iso); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
-  function daysBetween(a, b) { return Math.round((parse(b) - parse(a)) / 86400000); }
-  function regionName(j) { return j === 'uk' ? 'UK' : 'Australia'; }
-  function byId(id) { for (var i = 0; i < RECORDS.length; i++) if (RECORDS[i].id === id) return RECORDS[i]; return null; }
-  function stageName(r) { return r.stage === 'g' ? 'Guidance' : STAGES[r.stage]; }
-  function pubLabel(r) { return r.publishedLabel || fmt(r.published); }
-
-  function visibleRecords() {
-    return RECORDS.filter(function (r) {
-      if (r.j !== state.j) return false;
-      if (state.view === 'web' && !r.verified) return false;
-      return true;
-    });
-  }
-
-  function haystack(r) {
-    return [r.title, r.summary, r.regulator, r.affected, r.topics.join(' '), r.changes.join(' '), r.talk].join(' ').toLowerCase();
-  }
-
-  function filtered() {
-    var words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
-    var list = visibleRecords().filter(function (r) {
-      if (state.topic !== 'All' && r.topics.indexOf(state.topic) === -1) return false;
-      if (state.stage !== 'all' && String(r.stage) !== state.stage) return false;
-      if (state.reg !== 'all' && r.regulator !== state.reg) return false;
-      if (words.length) {
-        var h = haystack(r);
-        for (var i = 0; i < words.length; i++) if (h.indexOf(words[i]) === -1) return false;
-      }
-      return true;
-    });
-    list.sort(function (a, b) {
-      if (state.sort === 'eff') {
-        var ae = a.effective && a.effective >= TODAY ? a.effective : '9999';
-        var be = b.effective && b.effective >= TODAY ? b.effective : '9999';
-        if (ae !== be) return ae < be ? -1 : 1;
-      }
-      return a.published < b.published ? 1 : -1;
-    });
-    return list;
-  }
-
-  function ladderHTML(r) {
-    if (r.stage === 'g') return '<div class="ladder"><span class="guide">Guidance</span></div>';
-    var bars = '';
-    for (var i = 0; i < 3; i++) bars += '<i class="' + (i <= r.stage ? 'on' : '') + '"></i>';
-    return '<div class="ladder" aria-label="Stage: ' + stageName(r) + '"><span class="bars">' + bars + '</span><b>' + stageName(r) + '</b></div>';
-  }
-
-  function renderStrip() {
-    var items = UPCOMING.filter(function (u) {
-      if (u.j !== state.j) return false;
-      var d = daysBetween(TODAY, u.date);
-      return d >= 0 && d <= 366;
-    }).sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    $('upcoming-note').textContent = 'From ' + fmt(TODAY);
-    if (!items.length) { $('strip').innerHTML = '<p class="strip-empty">Nothing due in the next 12 months.</p>'; return; }
-    $('strip').innerHTML = items.map(function (u) {
-      var d = parse(u.date), days = daysBetween(TODAY, u.date);
-      var away = u.approx ? 'About ' + Math.round(days / 30) + ' months away' : days + ' days away';
-      var top, big, small = false;
-      if (u.label && u.label.indexOf('Early') === 0) { top = String(d.getUTCFullYear()); big = 'Early'; small = true; }
-      else if (u.label) { top = MONTHS[d.getUTCMonth()]; big = '’' + String(d.getUTCFullYear()).slice(2); }
-      else { top = MONTHS[d.getUTCMonth()]; big = String(d.getUTCDate()); }
-      var cal = '<div class="m">' + top + '</div><div class="d tnum"' + (small ? ' style="font-size:13px;padding:6px 0 7px"' : '') + '>' + big + '</div>';
-      return '<button type="button" class="due" data-open="' + u.id + '"><div class="cal">' + cal + '</div><div style="min-width:0"><div class="t">' + esc(u.text) + '</div><div class="s tnum">' + esc(u.who) + ' · ' + (u.label || fmt(u.date)) + '</div><span class="away tnum">' + away + '</span></div></button>';
-    }).join('');
-  }
-
-  function renderTopics() {
-    var set = {};
-    visibleRecords().forEach(function (r) { r.topics.forEach(function (t) { set[t] = true; }); });
-    var topics = ['All'].concat(Object.keys(set).sort());
-    if (topics.indexOf(state.topic) === -1) state.topic = 'All';
-    $('topics').innerHTML = topics.map(function (t) {
-      return '<button type="button" class="chip" data-topic="' + esc(t) + '" aria-pressed="' + (t === state.topic) + '">' + esc(t === 'All' ? 'All topics' : t) + '</button>';
-    }).join('');
-  }
-
-  function renderRegs() {
-    var set = {};
-    visibleRecords().forEach(function (r) { set[r.regulator] = true; });
-    var regs = Object.keys(set).sort();
-    if (state.reg !== 'all' && regs.indexOf(state.reg) === -1) state.reg = 'all';
-    $('f-reg').innerHTML = '<option value="all">All regulators</option>' + regs.map(function (g) {
-      return '<option value="' + esc(g) + '"' + (g === state.reg ? ' selected' : '') + '>' + esc(g) + '</option>';
-    }).join('');
-  }
-
-  function renderList() {
-    var list = filtered();
-    var all = visibleRecords();
-    var proposed = all.filter(function (r) { return r.stage === 0; }).length;
-    var review = all.filter(function (r) { return !r.verified; }).length;
-    var line = '<span><b>' + list.length + '</b> of ' + all.length + ' ' + regionName(state.j) + ' changes</span><span><b>' + proposed + '</b> at proposal stage</span>';
-    if (state.view === 'rep' && review) line += '<span><b>' + review + '</b> awaiting review</span>';
-    $('result-line').innerHTML = line;
-
-    if (!list.length) {
-      $('list').innerHTML = '<div class="empty">No changes match. Try a different word or clear the filters.</div>' + alertsHTML();
-      return list;
+  var R = [
+    {
+      id: 'uk-tplf', c: 'UK', reg: 'SRA', date: '2026-07-09', stage: 0,
+      title: 'Stronger rules proposed for litigation funding in consumer claims',
+      why: 'Consumer claims firms using third-party funding face tighter rules.',
+      changed: ['The SRA proposes stronger requirements for solicitors who use or arrange third-party funding in consumer claims.', 'The 10-week consultation has closed. A decision is next.'],
+      who: 'Firms running consumer claims with third-party funding.',
+      opener: 'The SRA plans tighter rules on litigation funding in consumer claims. How do you explain funding to clients at the start of a matter?',
+      effect: 'Not set yet',
+      src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/'
+    },
+    {
+      id: 'uk-complaints', c: 'UK', reg: 'SRA', date: '2026-07-03', stage: 0,
+      title: 'New rules proposed on telling clients how to complain',
+      why: 'Every firm may need to show complaints information earlier and more often.',
+      changed: ['Proposed rules so clients are told, and kept up to date, about how to complain to their firm.'],
+      who: 'All SRA-regulated firms.',
+      opener: 'The SRA wants clients told clearly how to complain. A consistent onboarding flow puts that in front of every client from day one.',
+      effect: 'Not set yet',
+      src: 'https://www.sra.org.uk/news/news/releases/first-tier-complaints-consultation-2026'
+    },
+    {
+      id: 'au-tranche2', c: 'Australia', reg: 'AUSTRAC', date: '2026-07-01', stage: 2,
+      title: 'Law firms are now regulated for AML/CTF (Tranche 2)',
+      why: 'Every firm doing property, company or trust work now has AML duties.',
+      changed: ['Since 1 July 2026, lawyers and conveyancers providing designated services are reporting entities.', 'They must enrol with AUSTRAC within 28 days of first providing one, run an AML/CTF program, do customer due diligence and report suspicious matters.', 'Records must be kept for 7 years.'],
+      who: 'Law practices and conveyancers handling property deals, setting up companies or trusts, or managing client funds.',
+      opener: 'AML/CTF duties started for law firms on 1 July. How is your team handling customer due diligence on new property and trust matters?',
+      effect: '1 Jul 2026',
+      src: 'https://www.austrac.gov.au/sites/default/files/2025-07/AMLCTF_obligations_factsheet_for_tranche_2_REs.pdf'
+    },
+    {
+      id: 'uk-notify', c: 'UK', reg: 'SRA', date: '2026-06-19', stage: 0,
+      title: 'Firms may need to tell the SRA about mergers earlier',
+      why: 'The SRA wants warning before mergers, acquisitions and new client accounts.',
+      changed: ['Firms would notify the SRA about planned mergers and acquisitions.', 'Firms would also notify it when they start holding client money.'],
+      who: 'All SRA-regulated firms, especially those planning a merger or acquisition.',
+      opener: 'The SRA is moving to earlier, risk-led supervision. If you’re planning a merger, expect to tell the SRA before it happens.',
+      effect: 'Not set yet',
+      src: 'https://www.sra.org.uk/home/hot-topics/consumer-protection-review/'
+    },
+    {
+      id: 'uk-money', c: 'UK', reg: 'SRA', date: '2026-06-02', stage: 1,
+      title: 'Client money reforms confirmed',
+      why: 'Annual reporting puts every client account under review from 2027.',
+      changed: ['Every firm holding client money files an accountants’ report each year, qualified or not.', 'Firms over £600,000 turnover or £2m client money must split the COLP and COFA roles from the person running the firm.', 'Fixed penalties for late reports from April 2027.'],
+      who: 'All SRA-regulated firms that hold client money.',
+      opener: 'From 2027 every firm holding client money files an accountants’ report every year. How clean are your client account reconciliations today?',
+      effect: 'Early 2027',
+      src: 'https://www.sra.org.uk/news/news/press/safeguards-protect-client-money'
+    },
+    {
+      id: 'uk-idv', c: 'UK', reg: 'Companies House', date: '2025-11-18', stage: 2,
+      title: 'Directors and PSCs must verify their identity',
+      why: 'Corporate clients are asking about it, and the transition ends in November.',
+      changed: ['New directors and people with significant control must verify before they act.', 'Existing ones have a 12-month transition, ending around 18 November 2026.'],
+      who: 'Firms’ corporate clients, and firms set up as LLPs or companies.',
+      opener: 'The Companies House transition ends in November. Corporate teams are getting client questions, and their own ID checks should match the register.',
+      effect: '18 Nov 2025',
+      src: 'https://www.gov.uk/guidance/verifying-your-identity-for-companies-house'
+    },
+    {
+      id: 'uk-fca', c: 'UK', reg: 'HM Treasury', date: '2025-10-21', stage: 1,
+      title: 'The FCA will become the AML supervisor for law firms',
+      why: 'Firms will move from SRA to FCA supervision for AML.',
+      changed: ['The SRA and the other professional body supervisors will stop supervising AML.', 'The FCA takes over once new legislation passes. Expected by 2029.'],
+      who: 'Every firm the SRA, CLC, CILEx Regulation or the Scottish and NI law societies supervise for AML.',
+      opener: 'Your AML supervisor is changing to the FCA. It’s a good time to make sure your client checks and risk assessments leave a clear audit trail.',
+      effect: 'By 2029',
+      src: 'https://www.sra.org.uk/news/news/sra-update-145-aml-supervision-change/'
+    },
+    {
+      id: 'au-rules', c: 'Australia', reg: 'AUSTRAC', date: '2025-08-29', stage: 2,
+      title: 'Final AML/CTF Rules published',
+      why: 'The detail behind Tranche 2: what a law firm’s AML program must contain.',
+      changed: ['AUSTRAC’s final Rules set out program content, customer due diligence and reporting.', 'They replace the previous Rules.'],
+      who: 'All AML/CTF reporting entities, including law practices.',
+      opener: 'AUSTRAC’s Rules spell out what a law firm’s AML program must contain. Has your firm mapped its onboarding steps against them?',
+      effect: '2026',
+      src: 'https://www.austrac.gov.au/amlctf-rules-release-and-upcoming-guidance'
+    },
+    {
+      id: 'au-adm', c: 'Australia', reg: 'OAIC', date: '2024-12-10', stage: 1,
+      title: 'Privacy policies must explain automated decisions',
+      why: 'Starts 10 December. Firms using automated checks need to update their policy.',
+      changed: ['From 10 December 2026, privacy policies must say when computer programs make, or help make, decisions that significantly affect people.'],
+      who: 'Organisations under the Privacy Act, generally turnover above $3m, that use automated decisions.',
+      opener: 'From 10 December privacy policies must explain automated decisions. If you use automated onboarding or risk checks, check what your policy says.',
+      effect: '10 Dec 2026',
+      src: 'https://www.oaic.gov.au/engage-with-us/consultations/consultation-on-guidance-for-transparency-in-automated-decision-making'
+    },
+    {
+      id: 'au-ransom', c: 'Australia', reg: 'Home Affairs', date: '2025-05-30', stage: 2,
+      title: 'Ransomware payments must be reported within 72 hours',
+      why: 'Law firms are a common target. Larger ones now have a reporting duty.',
+      changed: ['Businesses with turnover above $3m must report a ransomware payment within 72 hours.'],
+      who: 'Businesses over $3m turnover, including many law practices.',
+      opener: 'Larger firms that pay a ransom now have 72 hours to report it. Is that in your incident plan?',
+      effect: '30 May 2025',
+      src: 'https://www.homeaffairs.gov.au/cyber-security-subsite/files/factsheet-ransomware-payment-reporting.pdf'
     }
-    $('list').innerHTML = (state.view === 'web' ? alertsHTML() : '') + list.map(function (r) {
-      var flag = state.view === 'rep'
-        ? (r.verified ? '<span class="flag ok">Verified</span>' : '<span class="flag review">Awaiting review</span>')
-        : '';
-      return '<button type="button" class="card" data-id="' + r.id + '" aria-current="' + (r.id === state.selected) + '">' +
-        '<div class="card-top"><span class="reg">' + esc(r.regulator) + '</span><span class="tnum">' + pubLabel(r) + '</span></div>' +
-        '<h3>' + esc(r.title) + '</h3>' +
-        '<p>' + esc(r.summary) + '</p>' +
-        '<div class="card-foot">' + ladderHTML(r) + '<div class="tags">' + r.topics.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join('') + flag + '</div></div>' +
-        '</button>';
-    }).join('');
-    return list;
+  ];
+  R.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+
+  var SOON = [
+    { label: '18 Nov', text: 'Companies House transition ends', id: 'uk-idv' },
+    { label: '10 Dec', text: 'Automated decisions in privacy policies', id: 'au-adm' },
+    { label: 'Early 2027', text: 'SRA client money reporting', id: 'uk-money' }
+  ];
+
+  var CHIPS = [
+    { q: 'What’s changing for client money?', ids: ['uk-money', 'uk-notify'] },
+    { q: 'What do Australian firms need to do now?', ids: ['au-tranche2', 'au-rules'] },
+    { q: 'What’s coming up in the next 3 months?', intent: 'soon' },
+    { q: 'Who will supervise AML for UK firms?', ids: ['uk-fca'] }
+  ];
+
+  var state = { q: '', open: null };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function fmt(iso) { var p = iso.split('-'); return (+p[2]) + ' ' + MONTHS[+p[1] - 1] + ' ' + p[0]; }
+  function byId(id) { for (var i = 0; i < R.length; i++) if (R[i].id === id) return R[i]; return null; }
+  function hay(r) { return [r.c, r.reg, r.title, r.why, r.who, r.changed.join(' '), STAGES[r.stage]].join(' ').toLowerCase(); }
+
+  var STOP = { the: 1, and: 1, what: 1, whats: 1, for: 1, are: 1, how: 1, when: 1, who: 1, does: 1, with: 1, about: 1, any: 1, this: 1, that: 1, new: 1, law: 1, firms: 1, firm: 1, changes: 1, change: 1, changing: 1, will: 1, need: 1, from: 1, have: 1, our: 1, now: 1, there: 1, rules: 1, rule: 1 };
+  function words(q) {
+    return q.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9$£ /-]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 2 && !STOP[w]; });
+  }
+  function match(q) {
+    var ws = words(q);
+    if (!ws.length) return R.slice();
+    return R.filter(function (r) { var h = hay(r); return ws.some(function (w) { return h.indexOf(w) !== -1; }); });
   }
 
-  function alertsHTML() {
-    if (state.view !== 'web') return '';
-    return '<div class="alerts"><h3>Get ' + regionName(state.j) + ' regulatory alerts</h3>' +
-      '<p>A short email when a regulator proposes, decides or starts a change that affects law firms.</p>' +
-      '<form id="alerts-form"><input type="email" id="alerts-email" required placeholder="Work email" aria-label="Work email">' +
-      '<button type="submit" class="btn btn-primary">Sign up</button></form></div>';
-  }
+  var chev = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
-  function detailHTML(r) {
-    var head = '<div class="detail-head"><div class="meta"><span><b style="color:var(--fg)">' + esc(r.regulator) + '</b> · ' + regionName(r.j) + '</span>' +
-      '<button type="button" class="btn btn-plain detail-close" id="detail-close">Close</button></div>' +
-      '<h2>' + esc(r.title) + '</h2>' + ladderHTML(r) + '</div>';
-
-    var review = (!r.verified && state.view === 'rep') ? '<div class="review-note">' + esc(r.reviewNote) + '</div>' : '';
-
-    var dates = '<dl class="dates tnum">' +
-      '<div><dt>Published</dt><dd>' + pubLabel(r) + '</dd></div>' +
-      '<div><dt>Takes effect</dt><dd>' + esc(r.effectiveLabel) + '</dd></div>' +
-      (state.view === 'rep' ? '<div><dt>First seen</dt><dd>' + fmt(r.firstSeen) + '</dd></div>' : '') +
-      '<div><dt>Last checked</dt><dd>' + fmt(r.log[0][0]) + '</dd></div></dl>';
-
-    var timeline = '';
-    if (r.steps) {
-      timeline = '<div class="block"><h4>Where it is</h4><div class="timeline tnum">' + STAGES.map(function (s, i) {
-        var cls = 'step' + (i <= r.stage ? ' on' : '') + (i === r.stage ? ' current' : '');
-        return '<div class="' + cls + '"><b>' + s + '</b><span>' + esc(r.steps[i] || '—') + '</span></div>';
-      }).join('') + '</div></div>';
+  function itemHTML(r) {
+    var open = state.open === r.id;
+    var head = '<button type="button" class="row" data-row="' + r.id + '" aria-expanded="' + open + '">' +
+      '<span class="meta">' + esc(r.c) + ' · ' + esc(r.reg) + ' · ' + fmt(r.date) + '</span>' +
+      '<span class="title">' + esc(r.title) + '</span>' +
+      '<span class="why">' + esc(r.why) + '</span>' +
+      '<span class="side"><span class="stage s' + r.stage + '">' + STAGES[r.stage] + '</span>' + chev + '</span></button>';
+    var body = '';
+    if (open) {
+      body = '<div class="more">' +
+        '<div><h5>What changed</h5><ul>' + r.changed.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
+        '<div><h5>Who it affects</h5><p>' + esc(r.who) + '</p></div>' +
+        '<div class="opener"><h5>Opener</h5><p data-opener>' + esc(r.opener) + '</p><div class="opener-row"><button type="button" class="btn" data-copy="' + r.id + '">Copy</button></div></div>' +
+        '<div class="more-foot"><span class="mono">Takes effect: ' + esc(r.effect) + ' · Checked ' + fmt(TODAY) + '</span>' +
+        '<a class="btn btn-dark" href="' + esc(r.src) + '" target="_blank" rel="noopener">Official source</a></div>' +
+        '</div>';
     }
-
-    var body = '<div class="block"><h4>Summary</h4><p>' + esc(r.summary) + '</p></div>' +
-      '<div class="block"><h4>What changes</h4><ul>' + r.changes.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul></div>' +
-      '<div class="block"><h4>Who’s affected</h4><p>' + esc(r.affected) + '</p></div>';
-
-    var extra = state.view === 'rep'
-      ? '<div class="talk"><h4>Talking point for outreach</h4><p id="talk-text">' + esc(r.talk) + '</p><div class="row"><button type="button" class="btn btn-secondary" id="copy-talk">Copy</button></div></div>'
-      : '<div class="cta-box"><p><b style="color:var(--heading)">Preparing for this change?</b> See how Legl helps law firms run client onboarding, AML checks and payments in one place.</p><div class="row"><a class="btn btn-primary" href="https://legl.com" target="_blank" rel="noopener">Book a demo</a></div></div>';
-
-    var source = '<div class="detail-actions"><a class="btn btn-primary" href="' + esc(r.source.url) + '" target="_blank" rel="noopener">Read the official source</a></div>' +
-      '<p class="source-line">' + esc(r.source.label) + '</p>';
-
-    var log = '<div class="block"><h4>Update history</h4><ol class="log tnum">' + r.log.map(function (l) {
-      return '<li><time datetime="' + l[0] + '">' + fmt(l[0]) + '</time>' + esc(l[1]) + '</li>';
-    }).join('') + '</ol></div>';
-
-    return '<div class="detail-inner">' + head + review + dates + timeline + body + extra + source + log + '</div>';
+    return '<div class="item' + (open ? ' open' : '') + '" id="item-' + r.id + '">' + head + body + '</div>';
   }
 
-  function renderDetail() {
-    var r = state.selected ? byId(state.selected) : null;
-    if (r && (r.j !== state.j || (state.view === 'web' && !r.verified))) r = null;
-    if (!r) {
-      state.selected = null;
-      $('detail').innerHTML = '<div class="detail-inner"><p style="color:var(--muted)">Choose a change to see its dates, summary and source.</p></div>';
-      document.body.classList.remove('sheet-open');
-      return;
-    }
-    $('detail').innerHTML = detailHTML(r);
-    $('detail').scrollTop = 0;
+  function renderFeed() {
+    var list = state.q.trim() ? match(state.q) : R;
+    $('feed-title').textContent = state.q.trim() ? 'Matching changes' : 'Latest changes';
+    $('feed-count').textContent = list.length + ' of ' + R.length;
+    $('feed').innerHTML = list.length ? list.map(itemHTML).join('') : '<div class="empty">Nothing matches that. Press Enter to ask instead.</div>';
   }
 
-  function renderSources() {
-    $('sources-label').textContent = 'Sources watched for ' + regionName(state.j) + ' (' + SOURCES[state.j].length + ')';
-    $('sources').innerHTML = SOURCES[state.j].map(function (s) {
-      var n = visibleRecords().filter(function (r) { return r.regulator.indexOf(s.split(' (')[0]) === 0; }).length;
-      return '<li>' + (n ? '<b class="tnum">' + n + '</b>' : '') + esc(s) + '</li>';
+  function renderSoon() {
+    $('soon').innerHTML = '<span>Coming up:</span>' + SOON.map(function (s) {
+      return '<span><b>' + esc(s.label) + '</b> ' + esc(s.text) + '</span>';
     }).join('');
   }
 
-  function renderBrowse(keepSelection) {
-    renderStrip();
-    renderTopics();
-    renderRegs();
-    var list = renderList();
-    if (!keepSelection) {
-      var wide = window.matchMedia('(min-width: 1000px)').matches;
-      state.selected = wide && list.length ? list[0].id : null;
-      renderList();
-    }
-    renderDetail();
-    renderSources();
+  function renderChips() {
+    $('chips').innerHTML = CHIPS.map(function (c, i) { return '<button type="button" class="chip" data-chip="' + i + '">' + esc(c.q) + '</button>'; }).join('');
   }
 
-  function select(id, openSheet) {
-    state.selected = id;
-    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) {
-      c.setAttribute('aria-current', String(c.getAttribute('data-id') === id));
-    });
-    renderDetail();
-    if (openSheet && !window.matchMedia('(min-width: 1000px)').matches) document.body.classList.add('sheet-open');
-  }
-
-  function openRecord(id) {
-    var r = byId(id);
-    if (!r) return;
-    if (r.j !== state.j) setJ(r.j);
-    setTab('browse');
-    state.q = ''; $('q').value = '';
-    state.topic = 'All'; state.stage = 'all'; state.reg = 'all';
-    $('f-stage').value = 'all';
-    renderBrowse(true);
-    select(id, true);
-    var card = document.querySelector('.card[data-id="' + id + '"]');
-    if (card && window.matchMedia('(min-width: 1000px)').matches) card.scrollIntoView({ block: 'nearest' });
-  }
-
-  /* Ask */
-  var STOP = { the: 1, and: 1, what: 1, whats: 1, for: 1, are: 1, how: 1, when: 1, who: 1, does: 1, with: 1, about: 1, any: 1, there: 1, this: 1, that: 1, new: 1, law: 1, firms: 1, firm: 1, changes: 1, change: 1, changing: 1, will: 1, need: 1, from: 1, have: 1, our: 1, your: 1, rules: 1 };
-
-  function recordAnswer(r, full) {
-    var h = '<p><strong>' + esc(r.title) + '</strong><br><span style="color:var(--muted);font-size:14px">' + esc(r.regulator) + ' · ' + stageName(r) + ' · takes effect: ' + esc(r.effectiveLabel) + '</span></p><p>' + esc(r.summary) + '</p>';
-    if (full) h += '<p><b>Who’s affected:</b> ' + esc(r.affected) + '</p>';
-    return h;
-  }
-
-  function answer(q, preset) {
-    var pool = visibleRecords();
-    var name = regionName(state.j);
-    var ids = [];
-    var html = '';
-    var lower = q.toLowerCase();
+  function answerFor(q, preset) {
     var intent = preset && preset.intent;
-    if (!intent && !(preset && preset.ids)) {
-      if (/coming up|upcoming|next \d+|deadline|soon|due/.test(lower)) intent = 'upcoming';
-      else if (/consult|propos|draft/.test(lower)) intent = 'proposed';
+    if (!intent && !(preset && preset.ids) && /coming up|upcoming|next \d+|deadline|soon/.test(q.toLowerCase())) intent = 'soon';
+    if (intent === 'soon') {
+      return {
+        html: '<p>Three dates are coming up:</p><ul>' + SOON.map(function (s) { var r = byId(s.id); return '<li><b>' + esc(s.label) + '</b>: ' + esc(s.text) + ' <span class="sub">(' + esc(r.c) + ', ' + esc(r.reg) + ')</span></li>'; }).join('') + '</ul>',
+        ids: SOON.map(function (s) { return s.id; })
+      };
     }
-
-    if (intent === 'upcoming') {
-      var ups = UPCOMING.filter(function (u) { var d = daysBetween(TODAY, u.date); return u.j === state.j && d >= 0 && d <= 366; })
-        .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-      if (!ups.length) html = '<p>Nothing in the ' + name + ' records takes effect in the next 12 months.</p>';
-      else {
-        html = '<p>' + ups.length + ' date' + (ups.length > 1 ? 's' : '') + ' in the next 12 months for ' + name + ':</p><ul style="margin:0;padding-left:20px">' +
-          ups.map(function (u) { return '<li><b>' + (u.label || fmt(u.date)) + '</b> · ' + esc(u.who) + ': ' + esc(u.text) + '</li>'; }).join('') + '</ul>';
-        ups.forEach(function (u) { if (ids.indexOf(u.id) === -1) ids.push(u.id); });
-      }
-    } else if (intent === 'proposed') {
-      var props = pool.filter(function (r) { return r.stage === 0; });
-      html = '<p>' + props.length + ' ' + name + ' change' + (props.length === 1 ? ' is' : 's are') + ' still at proposal stage:</p><ul style="margin:0;padding-left:20px">' +
-        props.map(function (r) { return '<li><b>' + esc(r.title) + '</b> (' + esc(r.regulator) + ', ' + pubLabel(r) + ')</li>'; }).join('') + '</ul>' +
-        '<p>None of these have a start date yet. The tracker updates each record when the regulator publishes its decision.</p>';
-      ids = props.map(function (r) { return r.id; });
-    } else {
-      var picked;
-      if (preset && preset.ids) {
-        picked = preset.ids.map(byId).filter(function (r) { return r && pool.indexOf(r) !== -1; });
-      } else {
-        var words = lower.replace(/[^a-z0-9$£ /-]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 2 && !STOP[w]; });
-        picked = pool.map(function (r) {
-          var h = haystack(r), s = 0;
-          words.forEach(function (w) { if (h.indexOf(w) !== -1) s += (r.title.toLowerCase().indexOf(w) !== -1 ? 3 : 1); });
-          return { r: r, s: s };
-        }).filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s; }).slice(0, 3).map(function (x) { return x.r; });
-      }
-      if (!picked.length) {
-        html = '<p>I couldn’t find that in the ' + name + ' records. I only answer from changes the tracker holds.</p><p>Try asking about AML, client money, privacy or what’s coming up.</p>';
-      } else {
-        html = (picked.length > 1 ? '<p>' + picked.length + ' records in the tracker cover this.</p>' : '') +
-          picked.map(function (r, i) { return recordAnswer(r, picked.length === 1 || i === 0); }).join('');
-        ids = picked.map(function (r) { return r.id; });
-      }
+    var picked;
+    if (preset && preset.ids) picked = preset.ids.map(byId);
+    else {
+      var ws = words(q);
+      picked = R.map(function (r) {
+        var h = hay(r), s = 0;
+        ws.forEach(function (w) { if (h.indexOf(w) !== -1) s += r.title.toLowerCase().indexOf(w) !== -1 ? 3 : 1; });
+        return { r: r, s: s };
+      }).filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s; }).slice(0, 3).map(function (x) { return x.r; });
     }
-    return { html: html, ids: ids };
-  }
-
-  function renderThread(typing) {
-    var t = threads[state.j];
-    var h = t.map(function (m) {
-      if (m.role === 'user') return '<div class="msg user">' + esc(m.text) + '</div>';
-      var cites = m.ids.length ? '<div class="cites">' + m.ids.map(function (id) {
-        var r = byId(id);
-        return '<button type="button" class="cite" data-open="' + id + '">' + esc(r.regulator) + ': ' + esc(r.title.length > 48 ? r.title.slice(0, 46) + '…' : r.title) + '</button>';
-      }).join('') + '</div>' : '';
-      return '<div class="msg bot"><div class="who">Tracker</div>' + m.html + cites + '</div>';
+    if (!picked.length) {
+      return { html: '<p>Nothing in the tracker covers that yet. It only answers from changes it holds, so it won’t guess.</p><p class="sub">Try client money, AML, privacy or what’s coming up.</p>', ids: [] };
+    }
+    var html = picked.map(function (r, i) {
+      var p = '<p><b>' + esc(r.title) + '</b> <span class="sub">(' + esc(r.c) + ', ' + esc(r.reg) + ', ' + STAGES[r.stage].toLowerCase() + ')</span></p>';
+      p += '<p>' + esc(r.changed[0]) + (i === 0 && r.changed[1] ? ' ' + esc(r.changed[1]) : '') + '</p>';
+      if (i === 0) p += '<p class="sub">Affects: ' + esc(r.who) + '</p>';
+      return p;
     }).join('');
-    if (typing) h += '<div class="typing">Searching the ' + regionName(state.j) + ' records…</div>';
-    $('thread').innerHTML = h;
-  }
-
-  function renderAsk() {
-    $('ask-title').textContent = 'Ask about ' + regionName(state.j) + ' changes';
-    $('suggest').innerHTML = SUGGEST[state.j].map(function (s, i) {
-      return '<button type="button" data-suggest="' + i + '">' + esc(s.q) + '</button>';
-    }).join('');
-    renderThread(false);
+    return { html: html, ids: picked.map(function (r) { return r.id; }) };
   }
 
   function ask(q, preset) {
     q = q.trim();
     if (!q) return;
-    var j = state.j;
-    threads[j].push({ role: 'user', text: q });
-    renderThread(true);
+    var box = $('answer');
+    box.hidden = false;
+    box.className = 'answer';
+    box.innerHTML = '<p class="answer-q">' + esc(q) + '</p><p class="thinking">Reading the records…</p>';
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setTimeout(function () {
-      var a = answer(q, preset);
-      threads[j].push({ role: 'bot', html: a.html, ids: a.ids });
-      if (state.j === j) renderThread(false);
-      var last = $('thread').lastElementChild;
-      if (last) last.scrollIntoView({ block: 'nearest' });
-    }, reduce ? 0 : 550);
+      var a = answerFor(q, preset);
+      var src = a.ids.length ? '<div class="answer-src"><span>Sources</span>' + a.ids.map(function (id) {
+        var r = byId(id);
+        return '<button type="button" class="src-link" data-goto="' + id + '">' + esc(r.reg) + ': ' + esc(r.title.length > 40 ? r.title.slice(0, 38) + '…' : r.title) + '</button>';
+      }).join('') + '</div>' : '';
+      box.innerHTML = '<p class="answer-q">' + esc(q) + '</p><div class="answer-body">' + a.html + '</div>' + src;
+    }, reduce ? 0 : 500);
   }
 
-  /* State changes */
-  function setJ(j) {
-    state.j = j;
-    $('j-uk').setAttribute('aria-pressed', String(j === 'uk'));
-    $('j-au').setAttribute('aria-pressed', String(j === 'au'));
-    state.topic = 'All'; state.reg = 'all';
-  }
-  function setTab(tab) {
-    state.tab = tab;
-    $('tab-browse').setAttribute('aria-selected', String(tab === 'browse'));
-    $('tab-ask').setAttribute('aria-selected', String(tab === 'ask'));
-    $('panel-browse').hidden = tab !== 'browse';
-    $('panel-ask').hidden = tab !== 'ask';
-    if (tab === 'ask') { document.body.classList.remove('sheet-open'); renderAsk(); }
-  }
-  function embedCode() {
-    return '<iframe src="https://regulation-tracker.legl.com/embed?region=' + state.j + '&view=' + (state.view === 'rep' ? 'rep' : 'website') + '"\n  width="100%" height="900" style="border:0" title="Legl regulation tracker"></iframe>';
+  function goTo(id) {
+    state.q = ''; $('q').value = '';
+    state.open = id;
+    renderFeed();
+    var el = $('item-' + id);
+    if (el) {
+      el.scrollIntoView({ block: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      el.classList.add('flash');
+    }
   }
 
-  document.querySelectorAll('[data-j]').forEach(function (b) {
-    b.addEventListener('click', function () { setJ(b.getAttribute('data-j')); renderBrowse(false); if (state.tab === 'ask') renderAsk(); });
+  $('q').addEventListener('input', function (e) { state.q = e.target.value; renderFeed(); });
+  $('q').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(e.target.value, null); }
   });
-  document.querySelectorAll('[data-v]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      state.view = b.getAttribute('data-v');
-      $('v-rep').setAttribute('aria-pressed', String(state.view === 'rep'));
-      $('v-web').setAttribute('aria-pressed', String(state.view === 'web'));
-      renderBrowse(true);
-      if (!state.selected && window.matchMedia('(min-width: 1000px)').matches) renderBrowse(false);
-      if (state.tab === 'ask') renderAsk();
-    });
-  });
-  $('tab-browse').addEventListener('click', function () { setTab('browse'); });
-  $('tab-ask').addEventListener('click', function () { setTab('ask'); });
-
-  $('q').addEventListener('input', function (e) { state.q = e.target.value; renderList(); });
-  $('f-stage').addEventListener('change', function (e) { state.stage = e.target.value; renderList(); });
-  $('f-reg').addEventListener('change', function (e) { state.reg = e.target.value; renderList(); });
-  $('f-sort').addEventListener('change', function (e) { state.sort = e.target.value; renderList(); });
+  $('prompt').addEventListener('submit', function (e) { e.preventDefault(); ask($('q').value, null); });
 
   document.addEventListener('click', function (e) {
-    var t = e.target.closest ? e.target : null;
-    if (!t) return;
-    var chip = t.closest('[data-topic]');
-    if (chip) { state.topic = chip.getAttribute('data-topic'); renderTopics(); renderList(); return; }
-    var card = t.closest('.card');
-    if (card) { select(card.getAttribute('data-id'), true); return; }
-    var opener = t.closest('[data-open]');
-    if (opener) { openRecord(opener.getAttribute('data-open')); return; }
-    if (t.closest('#detail-close')) { document.body.classList.remove('sheet-open'); return; }
-    if (t.closest('#copy-talk')) {
-      var btn = t.closest('#copy-talk');
-      var text = $('talk-text').textContent;
-      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); };
-      var fallback = function () {
-        var range = document.createRange(); range.selectNodeContents($('talk-text'));
-        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
-        btn.textContent = 'Selected. Press Ctrl+C';
-      };
-      try { navigator.clipboard.writeText(text).then(done, fallback); } catch (err) { fallback(); }
-      return;
-    }
-    var sug = t.closest('[data-suggest]');
-    if (sug) { var s = SUGGEST[state.j][+sug.getAttribute('data-suggest')]; ask(s.q, s); return; }
-  });
-
-  document.addEventListener('submit', function (e) {
-    if (e.target.id === 'alerts-form') {
-      e.preventDefault();
-      e.target.outerHTML = '<p class="done">Thanks. In the live version you’d now get ' + regionName(state.j) + ' alerts by email.</p>';
+    var t = e.target;
+    var chip = t.closest('[data-chip]');
+    if (chip) { var c = CHIPS[+chip.getAttribute('data-chip')]; $('q').value = ''; state.q = ''; renderFeed(); ask(c.q, c); return; }
+    var go = t.closest('[data-goto]');
+    if (go) { goTo(go.getAttribute('data-goto')); return; }
+    var row = t.closest('[data-row]');
+    if (row) { var id = row.getAttribute('data-row'); state.open = state.open === id ? null : id; renderFeed(); return; }
+    var cp = t.closest('[data-copy]');
+    if (cp) {
+      var p = cp.closest('.opener').querySelector('[data-opener]');
+      var done = function () { cp.textContent = 'Copied'; setTimeout(function () { cp.textContent = 'Copy'; }, 1500); };
+      var fallback = function () { var rg = document.createRange(); rg.selectNodeContents(p); var s = window.getSelection(); s.removeAllRanges(); s.addRange(rg); cp.textContent = 'Selected, press Ctrl+C'; };
+      try { navigator.clipboard.writeText(p.textContent).then(done, fallback); } catch (err) { fallback(); }
     }
   });
-  $('composer').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var v = $('ask-input').value;
-    $('ask-input').value = '';
-    ask(v, null);
-  });
 
-  $('embed-btn').addEventListener('click', function () { $('embed-code').textContent = embedCode(); $('embed-modal').hidden = false; $('embed-close').focus(); });
-  $('embed-close').addEventListener('click', function () { $('embed-modal').hidden = true; });
-  $('embed-modal').addEventListener('click', function (e) { if (e.target.id === 'embed-modal') $('embed-modal').hidden = true; });
-  $('embed-copy').addEventListener('click', function () {
-    var btn = $('embed-copy');
-    var fallback = function () {
-      var range = document.createRange(); range.selectNodeContents($('embed-code'));
-      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
-      btn.textContent = 'Selected. Press Ctrl+C';
-    };
-    try { navigator.clipboard.writeText(embedCode()).then(function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy code'; }, 1600); }, fallback); } catch (err) { fallback(); }
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { $('embed-modal').hidden = true; document.body.classList.remove('sheet-open'); }
-  });
-
-  renderBrowse(false);
+  state.open = R[0].id;
+  renderChips();
+  renderSoon();
+  renderFeed();
 })();
 </script>
