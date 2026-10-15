@@ -23,7 +23,12 @@ There are three parts, and the repo is the database.
 
 ## The daily run
 
-The agent runs every morning on GitHub's scheduler.
+The agent is built with the Claude Agent SDK and runs every morning on GitHub's scheduler (GitHub Actions). The SDK provides what the job needs:
+
+- **Built-in tools:** web fetch for regulator pages, file editing for `data/`, and shell commands for checks and commits.
+- **Subagents:** the verifier runs as its own subagent with a clean context, so it checks the draft independently.
+- **Permissions:** the agent can only edit `data/` and only fetch the domains listed in `sources/`.
+- **Hooks:** the format check runs automatically after every file the agent writes.
 
 1. **Watch.** It checks every source in `sources/` and keeps only what is new or different since the last run.
 2. **Draft.** For each new item, AI either writes a new record or updates the existing one (for example, a consultation that has become a final rule).
